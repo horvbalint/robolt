@@ -1,0 +1,26 @@
+{
+  "name": "robolt",
+  "version": "1.0",
+  "description": "a frontend helper class for projects using Robogo and Axios",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/horvbalint/robolt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/horvbalint/robolt.git"
+  },
+  "keywords": [
+    "js",
+    "api",
+    "robogo",
+    "robo",
+    "file",
+    "access",
+    "easy"
+  ],
+  "license" : "(CC-BY-4.0)",
+  "author": "horvbalint",
+  "dependencies": {}
+}

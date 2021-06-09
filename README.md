@@ -5,15 +5,15 @@
 
 ## Table of contents
 
-* [Getting started](#install)
-* [Methods:](#methods)
-  * [Create](#create)
-  * [Read](#read)
-  * [Update](#update)
-  * [Delete](#delete)
-  * [Service](#service)
-  * [File](#file)
-  * [Special](#special)
+* [Getting started](#installSection)
+* [Methods:](#methodsSection)
+  * [Create](#createMethods)
+  * [Read](#readMethods)
+  * [Update](#updateMethods)
+  * [Delete](#deleteMethods)
+  * [Service](#serviceMethods)
+  * [File](#fileMethods)
+  * [Special](#specialMethods)
 
 
 ## Disclaimer
@@ -22,7 +22,7 @@ We take no responsibility for any demage done by this package.
 If you find anything that isn't working or not up to the documentation create a pull request over on [github](https://github.com/horvbalint/robogo/issues).
 Thank You in advance!
 
-<a name="install"></a>
+<a name="installSection"></a>
 ## Getting started
 
 A very simple example:
@@ -46,11 +46,11 @@ The constructor uses the following parameters:
 |serveStaticPath|String|The path where the files are static hosted. Same as in the constructor of robogo|'static'|
 |defaultFilter|Object|A [MongoDB filter](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) object. Every request's filter will be this object if no filter was provided|{}|
 
-<a name="methods"></a>
+<a name="methodsSection"></a>
 ## Methods
 This section will describe the methods of robolt that are available to use. These are organized in seven categories: Create, Read, Update, Delete, Service, File and Special.
 
-<a name="create"></a>
+<a name="createMethods"></a>
 ### Create methods
 Every create method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -73,7 +73,7 @@ this.$API.Create(modelName, documentObject)
 
 
 <br></br>
-<a name="read"></a>
+<a name="readMethods"></a>
 ### Read methods
 Every read method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -118,7 +118,7 @@ this.$API.Get(modelName, documentId[, optionsObject ])
 
 
 <br></br>
-<a name="update"></a>
+<a name="updateMethods"></a>
 ### Update methods
 Every update method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -139,7 +139,7 @@ An object with an _id field containing the ObjectId of the document we want to u
 
 
 <br></br>
-<a name="delete"></a>
+<a name="deleteMethods"></a>
 ### Delete methods
 Every delete method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -157,7 +157,7 @@ this.$API.Delete(modelName, documentId)
 
 
 <br></br>
-<a name="service"></a>
+<a name="serviceMethods"></a>
 ### Service methods
 Every service method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -202,7 +202,7 @@ this.$API.RunService(serviceName, functionName, params)
 
 
 <br></br>
-<a name="file"></a>
+<a name="fileMethods"></a>
 ### File methods
 
 #### UploadFile
@@ -314,7 +314,7 @@ Either the whole [RoboFile document](TODO/#files) of the file or its _id value.
 
 
 <br></br>
-<a name="special"></a>
+<a name="specialMethods"></a>
 ### Special methods
 Every special method returns a Promise that is resolved with the result or rejected with an error.
 
