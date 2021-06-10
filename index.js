@@ -56,6 +56,18 @@ export default class __API {
     })
   }
 
+  Search(modelName, options = {}) {
+    return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
+      params: {
+        filter: options.filter || this.DefaultFilter,
+        projection: options.projection,
+        threshold: options.threshold,
+        keys: options.keys,
+        term: options.term,
+      }
+    })
+  }
+
   Create(modelName, data) {
     return this.$axios.$post(`/${this.Prefix}/${modelName}`, data)
   }

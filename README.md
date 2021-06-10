@@ -117,6 +117,28 @@ this.$API.Get(modelName, documentId[, optionsObject ])
 |:-|:-:|:-:|:-:|
 | projection | Array\<String\> | Fields to include in [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
 
+<br></br>
+#### Search
+> Sends a GET request to the '/search/:model' route of robogo with the given data.
+
+* Method: GET
+* Resolves: Array<Object (MongoDB document)>
+
+```javascript
+this.$API.Search(modelName[, optionsObject ])
+.then( documents =>  ...  )
+.catch( error =>  ...  )
+```
+
+##### optionsObject:
+| key | type | description | example |
+|:-|:-:|:-:|:-:|
+| filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {Chandler: {$in: friends}} |
+| projection | Array\<String\> | Fields to include in results. Uses MongoDB [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
+| threshold | Number | [Fuse.js](https://www.npmjs.com/package/fuse.js) threshold, defaults to 0.4 | 0.6 |
+| keys | Array\<String\> | Keys of the document that are searched in. If no keys are provided all keys of the document will be used. | ['username'] |
+| term | String | Search term that is searched for | 'search term' |
+
 
 <br></br>
 <a name="updateMethods"></a>
