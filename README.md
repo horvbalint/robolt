@@ -1,4 +1,4 @@
-# Robolt
+# robolt
 
 > Robolt is a frontend helper class for projects using [Robogo](TODO) and [Axios](https://www.npmjs.com/package/axios). The aim is to provide an easy to use and flexible way to communicate with robogo.
 
@@ -19,7 +19,8 @@
 ## Disclaimer
 We take no responsibility for any demage done by this package.
 
-If you find anything that isn't working or not up to the documentation create a pull request over on [github](https://github.com/horvbalint/robogo/issues).
+If you find anything that isn't working or not up to the documentation, please open issue or a pull request over on [github](https://github.com/horvbalint/robolt/issues).
+
 Thank You in advance!
 
 <a name="installSection"></a>
@@ -30,11 +31,11 @@ A very simple example:
 import Robolt from 'robolt'
 import axios from 'axios'
 
-// configure axios if needed (eg.: baseURL) before creating the Robolt instance
+// configure axios here if needed (eg.: baseURL) before creating the robolt instance
 
 const robolt = new Robolt(axios, 'api')
 
-// Robolt is ready to be used!
+// robolt is ready to be used!
 ```
 
 The constructor uses the following parameters:
@@ -209,13 +210,19 @@ this.$API.RunService(serviceName, functionName, params)
 > Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
 
 * Method: POST
-* Resolves: Promise\<[RoboFile document](TODO/#files)\>
+* Returns: Promise\<[RoboFile document](TODO/#files)\>
 
 ```javascript
-this.$API.UploadFile(file)
+this.$API.UploadFile(file[, percentCallback])
 .then( result =>  ...  )
 .catch( error =>  ...  )
 ```
+
+##### Params:
+| key | type | description |
+|:-|:-:|:-:|
+| file | File | File instance, eg.: from a file input |
+| percentCallback | Function | Callback that will be called multiple times, while the file is uploading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetFileURLs
@@ -226,7 +233,8 @@ this.$API.UploadFile(file)
 ```javascript
 this.$API.GetFileURLs(file)
 ```
-file: [RoboFile document](TODO/#files) to the file
+##### file:
+[RoboFile document](TODO/#files) to the file
 
 <br></br>
 #### GetFile
@@ -247,7 +255,7 @@ this.$API.GetFile(file[, percentCallback])
 
 <br></br>
 #### GetFileURL
-> Downloads the file for a [RoboFile document](TODO/#files) from robogo and returns a local URL.
+> Downloads the file for a [RoboFile document](TODO/#files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -281,7 +289,7 @@ this.$API.GetThumbnail(file[, percentCallback])
 
 <br></br>
 #### GetThumbnailURL
-> Downloads the thumbnail file for a [RoboFile document](TODO/#files) from robogo and returns a local URL.
+> Downloads the thumbnail file for a [RoboFile document](TODO/#files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -301,7 +309,7 @@ this.$API.GetThumbnailURL(file[, percentCallback])
 > Sends a DELETE request to the '/filedelete/:id' route of robogo with the given file id.
 
 * Method: DELETE
-* Resolves: Promise\<Empty\>
+* Returns: Promise\<Empty\>
 
 ```javascript
 this.$API.DeleteFile(file)
@@ -310,7 +318,7 @@ this.$API.DeleteFile(file)
 ```
 
 ##### File:
-Either the whole [RoboFile document](TODO/#files) of the file or its _id value.
+Either the whole [RoboFile document](TODO/#files) of the file or its _id.
 
 
 <br></br>
@@ -332,15 +340,15 @@ this.$API.Schema(modelName)
 ```
 
 <br></br>
-#### TableHeaders
+#### Fields
 >Sends a GET request to the '/fields/:id' route of robogo.
 
 * Methods: GET
 * Resolves into: Array of Objects
 
 ```javascript
-this.$API.TableHeaders(modelName)
-.then( headers => ... )
+this.$API.Fields(modelName)
+.then( fields => ... )
 .catch( error => ... )
 ```
 
@@ -362,7 +370,7 @@ this.$API.Count(modelName[, filter])
 
 <br></br>
 ## Contributing
-Every contribution is more then welcomed. If you have an idea or made some changes to the code, please open a pull request at the package's [github page](https://github.com/horvbalint/robogo/issues).
+Every contribution is more then welcomed. If you have an idea or made some changes to the code, please open an issue or a pull request at the package's [github page](https://github.com/horvbalint/robolt/issues).
   
 
 ## Authors

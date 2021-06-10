@@ -144,7 +144,7 @@ export default class __API {
     return this.$axios.$delete(`/${this.Prefix}/${modelName}/${id}`)
   }
 
-  TableHeaders(modelName) {
-    return this.$axios.$get(`/${this.Prefix}/tableheaders/${modelName}`)
+  Fields(modelName) {
+    return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`)
   }
 }
