@@ -82,7 +82,7 @@ Every read method returns a Promise that is resolved with the result or rejected
 > Sends a GET request to the '/:model/find' route of robogo with the given data.
 
 * Method: GET
-* Resolves: Array<Objects (mongodb documents)>
+* Resolves: Array<Object (MongoDB document)>
 
 ```javascript
 this.$API.Read(modelName[, optionsObject ])
@@ -94,7 +94,7 @@ this.$API.Read(modelName[, optionsObject ])
 | key | type | description | example |
 |:-|:-:|:-:|:-:|
 | filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {Chandler: {$in: friends}} |
-| projection | Array\<String\> | Fields to include in results. Uses mongodb [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
+| projection | Array\<String\> | Fields to include in results. Uses MongoDB [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
 | sort | Object | [Mongodb sort](https://docs.mongodb.com/manual/reference/method/cursor.sort/index.html) | { age : 1 } |
 | skip | Number | The number of documents to skip in the results set. | 10 |
 | limit | Number | The number of documents to include in the results set. | 5 |
@@ -104,7 +104,7 @@ this.$API.Read(modelName[, optionsObject ])
 > Sends a GET request to the '/:model/:id' route of robogo with the given data.
 
 * Method: GET
-* Resolves: Object (mongodb document)
+* Resolves: Object (MongoDB document)
 
 ```javascript
 this.$API.Get(modelName, documentId[, optionsObject ])
