@@ -57,7 +57,7 @@ export default class __API {
   }
 
   Search(modelName, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
+    return this.$axios.$get(`/${this.Prefix}/${modelName}/search`, {
       params: {
         filter: options.filter || this.DefaultFilter,
         projection: options.projection,

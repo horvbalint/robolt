@@ -119,7 +119,7 @@ this.$API.Get(modelName, documentId[, optionsObject ])
 
 <br></br>
 #### Search
-> Sends a GET request to the '/search/:model' route of robogo with the given data.
+> Sends a GET request to the '/:model/search' route of robogo with the given data.
 
 * Method: GET
 * Resolves: Array<Object (MongoDB document)>
