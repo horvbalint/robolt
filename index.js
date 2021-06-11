@@ -16,6 +16,12 @@ export default class __API {
     })
   }
 
+  SearchKeys(modelName, depth) {
+    return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
+      params: {depth},
+    })
+  }
+
   GetService(serviceName, functionName, params) {
     return this.$axios.$get(`/${this.Prefix}/getter/${serviceName.toLowerCase()}/${functionName}`, {
       params: params,

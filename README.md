@@ -389,6 +389,21 @@ this.$API.Count(modelName[, filter])
 ##### filter:
 [MongoDB filter](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) object
 
+<br></br>
+#### SearchKeys
+> Sends a GET request to the '/searchkeys/:model' route of robogo.
+
+* Methods: GET
+* Resolves into: Array\<String\>
+
+```javascript
+this.$API.SearchKeys(modelName[, depth])
+.then( keys => ... )
+.catch( error => ... )
+```
+##### depth:
+Number, that limits the depth of the keys to be picked from the model's schema
+
 
 <br></br>
 ## Contributing
