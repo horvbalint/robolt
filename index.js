@@ -6,44 +6,12 @@ export default class __API {
     this.DefaultFilter = defaultFilter
   }
 
-  Count(modelName, filter = this.DefaultFilter) {
-    return new Promise((resolve, reject) => {
-      this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
-        params: {filter},
-      })
-      .then( res => resolve(res.count) )
-      .catch( err => reject(err) )
-    })
-  }
-
-  SearchKeys(modelName, depth) {
-    return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
-      params: {depth},
-    })
-  }
-
-  GetService(serviceName, functionName, params) {
-    return this.$axios.$get(`/${this.Prefix}/getter/${serviceName.toLowerCase()}/${functionName}`, {
-      params: params,
-    })
-  }
-
-  RunService(serviceName, functionName, params) {
-    return this.$axios.$post(`/${this.Prefix}/runner/${serviceName.toLowerCase()}/${functionName}`, params)
-  }
-
-  Schema(modelName) {
-    return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
-  }
-
-  SchemaKeys(modelName, depth) {
-    return this.$axios.$post(`/${this.Prefix}/schemakeys/${modelName}`, {
-      depth: depth,
-    })
+  Create(modelName, data) {
+    return this.$axios.$post(`/${this.Prefix}/create/${modelName}`, data)
   }
 
   Read(modelName, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/${modelName}/find`, {
+    return this.$axios.$get(`/${this.Prefix}/read/${modelName}`, {
       params: {
         filter: options.filter || this.DefaultFilter,
         projection: options.projection,
@@ -55,7 +23,7 @@ export default class __API {
   }
 
   Get(modelName, id, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/${modelName}/${id}`, {
+    return this.$axios.$get(`/${this.Prefix}/get/${modelName}/${id}`, {
       params: {
         projection: options.projection,
       }
@@ -63,7 +31,7 @@ export default class __API {
   }
 
   Search(modelName, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/${modelName}/search`, {
+    return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
       params: {
         filter: options.filter || this.DefaultFilter,
         projection: options.projection,
@@ -74,8 +42,22 @@ export default class __API {
     })
   }
 
-  Create(modelName, data) {
-    return this.$axios.$post(`/${this.Prefix}/${modelName}`, data)
+  Update(modelName, data) {
+    return this.$axios.$patch(`/${this.Prefix}/update/${modelName}`, data)
+  }
+
+  Delete(modelName, id) {
+    return this.$axios.$delete(`/${this.Prefix}/delete/${modelName}/${id}`)
+  }
+
+  RunService(serviceName, functionName, params) {
+    return this.$axios.$post(`/${this.Prefix}/runner/${serviceName}/${functionName}`, params)
+  }
+
+  GetService(serviceName, functionName, params) {
+    return this.$axios.$get(`/${this.Prefix}/getter/${serviceName}/${functionName}`, {
+      params: params,
+    })
   }
 
   UploadFile(file, percentCallback) {
@@ -108,6 +90,18 @@ export default class __API {
     return urls
   }
 
+  GetFile(file, percentCallback) {
+    let path = typeof file == 'string' ? file : file.path
+    let config = {responseType: 'blob'}
+    if(percentCallback)
+      config.onDownloadProgress = event => {
+        let percentage = Math.round((event.loaded * 100) / event.total)
+        percentCallback(percentage, event)
+      }
+
+    return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
+  }
+
   GetFileURL(file, percentCallback) {
     return new Promise((resolve, reject) => {
       this.GetFile(file, percentCallback)
@@ -116,8 +110,8 @@ export default class __API {
     })
   }
 
-  GetFile(file, percentCallback) {
-    let path = typeof file == 'string' ? file : file.path
+  GetThumbnail(file, percentCallback) {
+    let path = typeof file == 'string' ? file : file.thumbnailPath
     let config = {responseType: 'blob'}
     if(percentCallback)
       config.onDownloadProgress = event => {
@@ -136,33 +130,33 @@ export default class __API {
     })
   }
 
-  GetThumbnail(file, percentCallback) {
-    let path = typeof file == 'string' ? file : file.thumbnailPath
-    let config = {responseType: 'blob'}
-    if(percentCallback)
-      config.onDownloadProgress = event => {
-        let percentage = Math.round((event.loaded * 100) / event.total)
-        percentCallback(percentage, event)
-      }
-
-    return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
-  }
-
   DeleteFile(file) {
     let id = typeof file == 'string' ? file : file._id
 
     return this.$axios.$delete(`/${this.Prefix}/filedelete/${id}`)
   }
 
-  Update(modelName, data) {
-    return this.$axios.$patch(`/${this.Prefix}/${modelName}`, data)
-  }
-
-  Delete(modelName, id) {
-    return this.$axios.$delete(`/${this.Prefix}/${modelName}/${id}`)
+  Schema(modelName) {
+    return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
   }
 
   Fields(modelName) {
     return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`)
+  }
+
+  Count(modelName, filter = this.DefaultFilter) {
+    return new Promise((resolve, reject) => {
+      this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
+        params: {filter},
+      })
+      .then( res => resolve(res.count) )
+      .catch( err => reject(err) )
+    })
+  }
+
+  SearchKeys(modelName, depth) {
+    return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
+      params: {depth},
+    })
   }
 }

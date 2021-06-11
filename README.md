@@ -56,7 +56,7 @@ This section will describe the methods of robolt that are available to use. Thes
 Every create method returns a Promise that is resolved with the result or rejected with an error.
 
 #### Create
-> Sends a POST request to the '/:model' route of robogo with the given data.
+> Sends a POST request to the '/create/:model' route of robogo with the given data.
 
 * Method: POST
 * Resolves: Object (MongoDB document)
@@ -79,7 +79,7 @@ this.$API.Create(modelName, documentObject)
 Every read method returns a Promise that is resolved with the result or rejected with an error.
 
 #### Read
-> Sends a GET request to the '/:model/find' route of robogo with the given data.
+> Sends a GET request to the '/read/:model' route of robogo with the given data.
 
 * Method: GET
 * Resolves: Array<Object (MongoDB document)>
@@ -101,7 +101,7 @@ this.$API.Read(modelName[, optionsObject ])
 
 <br></br>
 #### Get
-> Sends a GET request to the '/:model/:id' route of robogo with the given data.
+> Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
 
 * Method: GET
 * Resolves: Object (MongoDB document)
@@ -119,7 +119,7 @@ this.$API.Get(modelName, documentId[, optionsObject ])
 
 <br></br>
 #### Search
-> Sends a GET request to the '/:model/search' route of robogo with the given data.
+> Sends a GET request to the '/search/:model' route of robogo with the given data.
 
 * Method: GET
 * Resolves: Array<Object (MongoDB document)>
@@ -146,7 +146,7 @@ this.$API.Search(modelName[, optionsObject ])
 Every update method returns a Promise that is resolved with the result or rejected with an error.
 
 #### Update
-> Sends a PATCH request to the '/:model' route of robogo with the given data.
+> Sends a PATCH request to the '/update/:model' route of robogo with the given data.
 
 * Method: PATCH
 * Resolves: [WriteResults](https://docs.mongodb.com/manual/reference/method/db.collection.update/#std-label-writeresults-update)
@@ -167,7 +167,7 @@ An object with an _id field containing the ObjectId of the document we want to u
 Every delete method returns a Promise that is resolved with the result or rejected with an error.
 
 #### Delete
-> Sends a DELETE request to the '/:model/:id' route of robogo with the given document _id.
+> Sends a DELETE request to the '/delete/:model/:id' route of robogo with the given document _id.
 
 * Method: DELETE
 * Resolves: [WriteResults](https://docs.mongodb.com/manual/reference/method/db.collection.update/#std-label-writeresults-update)
@@ -184,14 +184,14 @@ this.$API.Delete(modelName, documentId)
 ### Service methods
 Every service method returns a Promise that is resolved with the result or rejected with an error.
 
-#### GetService
-> Sends a GET request to the '/getter/:service/:function' route of robogo with the given data.
+#### RunService
+> Sends a POST request to the '/runner/:service/:function' route of robogo with the given data.
 
-* Method: GET
+* Method: POST
 * Resolves: Any
 
 ```javascript
-this.$API.GetService(serviceName, functionName, params)
+this.$API.RunService(serviceName, functionName, params)
 .then( result =>  ...  )
 .catch( error =>  ...  )
 ```
@@ -204,14 +204,14 @@ this.$API.GetService(serviceName, functionName, params)
 | params | Any | The parameters that the service awaits |
 
 <br></br>
-#### RunService
-> Sends a POST request to the '/runner/:service/:function' route of robogo with the given data.
+#### GetService
+> Sends a GET request to the '/getter/:service/:function' route of robogo with the given data.
 
-* Method: POST
+* Method: GET
 * Resolves: Any
 
 ```javascript
-this.$API.RunService(serviceName, functionName, params)
+this.$API.GetService(serviceName, functionName, params)
 .then( result =>  ...  )
 .catch( error =>  ...  )
 ```
@@ -350,7 +350,7 @@ Every special method returns a Promise that is resolved with the result or rejec
 
 <a name="schema"></a>
 ####  Schema
->Sends a GET request to the '/schema/:id' route of robogo.
+>Sends a GET request to the '/schema/:model' route of robogo.
 
 * Method: GET
 * Resolves into: Object
@@ -363,7 +363,7 @@ this.$API.Schema(modelName)
 
 <br></br>
 #### Fields
->Sends a GET request to the '/fields/:id' route of robogo.
+>Sends a GET request to the '/fields/:model' route of robogo.
 
 * Methods: GET
 * Resolves into: Array of Objects
