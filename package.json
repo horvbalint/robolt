@@ -1,6 +1,6 @@
 {
   "name": "robolt",
-  "version": "1.0",
+  "version": "0.1",
   "description": "a frontend helper class for projects using Robogo and Axios",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "access",
     "easy"
   ],
-  "license" : "(CC-BY-4.0)",
+  "license" : "Apache-2.0",
   "author": "horvbalint",
   "dependencies": {}
 }

@@ -1,6 +1,6 @@
 # robolt
 
-> Robolt is a frontend helper class for projects using [Robogo](TODO) and [Axios](https://www.npmjs.com/package/axios). The aim is to provide an easy to use and flexible way to communicate with robogo.
+> Robolt is a frontend helper class for projects using [Robogo](https://www.npmjs.com/package/robogo) and [Axios](https://www.npmjs.com/package/axios). The aim is to provide an easy to use and flexible way to communicate with robogo.
 
 
 ## Table of contents
@@ -43,7 +43,7 @@ The constructor uses the following parameters:
 | Parameter  | Type | Description | Default |
 |:-|:-:|:-:|:-:|
 |axios|Function|The axios function preconfigured|
-|prefix|String|The prefix that was used when [the routes of robogo were registered to express.js](TODO/#install)|
+|prefix|String|The prefix that was used when [the routes of robogo were registered to express.js](https://www.npmjs.com/package/robogo/#install)|
 |serveStaticPath|String|The path where the files are static hosted. Same as in the constructor of robogo|'static'|
 |defaultFilter|Object|A [MongoDB filter](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) object. Every request's filter will be this object if no filter was provided|{}|
 
@@ -232,7 +232,7 @@ this.$API.GetService(serviceName, functionName, params)
 > Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
 
 * Method: POST
-* Returns: Promise\<[RoboFile document](TODO/#files)\>
+* Returns: Promise\<[RoboFile document](https://www.npmjs.com/package/robogo/#files)\>
 
 ```javascript
 this.$API.UploadFile(file[, percentCallback])
@@ -256,11 +256,11 @@ this.$API.UploadFile(file[, percentCallback])
 this.$API.GetFileURLs(file)
 ```
 ##### file:
-[RoboFile document](TODO/#files) to the file
+[RoboFile document](https://www.npmjs.com/package/robogo/#files) to the file
 
 <br></br>
 #### GetFile
-> Downloads the file for a [RoboFile document](TODO/#files) from robogo.
+> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo.
 
 * Method: GET
 * Returns: Promise\<File\>
@@ -272,12 +272,12 @@ this.$API.GetFile(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](TODO/#files) of the file or its _id|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetFileURL
-> Downloads the file for a [RoboFile document](TODO/#files) from robogo and returns a local URL for it.
+> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -289,12 +289,12 @@ this.$API.GetFileURL(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](TODO/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetThumbnail
-> Downloads the thumbnail file for a [RoboFile document](TODO/#files) from robogo.
+> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo.
 
 * Method: GET
 * Returns: Promise\<File\>
@@ -306,12 +306,12 @@ this.$API.GetThumbnail(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](TODO/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetThumbnailURL
-> Downloads the thumbnail file for a [RoboFile document](TODO/#files) from robogo and returns a local URL for it.
+> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -323,7 +323,7 @@ this.$API.GetThumbnailURL(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](TODO/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
@@ -340,7 +340,7 @@ this.$API.DeleteFile(file)
 ```
 
 ##### File:
-Either the whole [RoboFile document](TODO/#files) of the file or its _id.
+Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id.
 
 
 <br></br>
