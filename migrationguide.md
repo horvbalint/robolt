@@ -3,3 +3,4 @@
 * DownloadFile, DownloadThumbnail -> GetFile, GetThumbnail
 * GetFile -> GetFileURL
 * GetThumbnail -> GetThumbnailURL
+* TableHeaders -> Fields

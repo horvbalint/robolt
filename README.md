@@ -137,6 +137,7 @@ this.$API.Search(modelName[, optionsObject ])
 | projection | Array\<String\> | Fields to include in results. Uses MongoDB [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
 | threshold | Number | [Fuse.js](https://www.npmjs.com/package/fuse.js) threshold, defaults to 0.4 | 0.6 |
 | keys | Array\<String\> | Keys of the document that are searched in. If no keys are provided all keys of the document will be used. | ['username'] |
+| depth | Number | If no keys are provided, we can limit the depth of the keys to be picked from the schema, defaults to Infinity | 2 |
 | term | String | Search term that is searched for | 'search term' |
 
 

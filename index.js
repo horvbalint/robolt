@@ -1,4 +1,4 @@
-export default class __API {
+export default class Robolt {
   constructor(axios, prefix, serveStaticPath = 'static', defaultFilter = {}) {
     this.$axios = axios
     this.Prefix = prefix
@@ -37,6 +37,7 @@ export default class __API {
         projection: options.projection,
         threshold: options.threshold,
         keys: options.keys,
+        depth: options.depth,
         term: options.term,
       }
     })
