@@ -1,4 +1,4 @@
-export default class Robolt {
+export default class __API {
   constructor(axios, prefix, serveStaticPath = 'static', defaultFilter = {}) {
     this.$axios = axios
     this.Prefix = prefix
@@ -141,8 +141,12 @@ export default class Robolt {
     return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
   }
 
-  Fields(modelName) {
-    return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`)
+  Fields(modelName, depth) {
+    return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`, {
+      params: {
+        depth
+      }
+    })
   }
 
   Count(modelName, filter = this.DefaultFilter) {

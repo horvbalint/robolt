@@ -5,15 +5,15 @@
 
 ## Table of contents
 
-* [Getting started](#installSection)
-* [Methods:](#methodsSection)
-  * [Create](#createMethods)
-  * [Read](#readMethods)
-  * [Update](#updateMethods)
-  * [Delete](#deleteMethods)
-  * [Service](#serviceMethods)
-  * [File](#fileMethods)
-  * [Special](#specialMethods)
+* [Getting started](#getting-started)
+* [Methods:](#methods)
+  * [Create](#create-methods)
+  * [Read](#read-methods)
+  * [Update](#update-methods)
+  * [Delete](#delete-methods)
+  * [Service](#service-methods)
+  * [File](#file-methods)
+  * [Special](#special-methods)
 
 
 ## Disclaimer
@@ -23,7 +23,7 @@ If you find anything that isn't working or not up to the documentation, please o
 
 Thank You in advance!
 
-<a name="installSection"></a>
+<a name="getting-started"></a>
 ## Getting started
 
 A very simple example:
@@ -43,15 +43,15 @@ The constructor uses the following parameters:
 | Parameter  | Type | Description | Default |
 |:-|:-:|:-:|:-:|
 |axios|Function|The axios function preconfigured|
-|prefix|String|The prefix that was used when [the routes of robogo were registered to express.js](https://www.npmjs.com/package/robogo/#install)|
+|prefix|String|The prefix that was used when [the routes of robogo were registered to express.js](https://www.npmjs.com/package/robogo#getting-started)|
 |serveStaticPath|String|The path where the files are static hosted. Same as in the constructor of robogo|'static'|
 |defaultFilter|Object|A [MongoDB filter](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) object. Every request's filter will be this object if no filter was provided|{}|
 
-<a name="methodsSection"></a>
+<a name="methods"></a>
 ## Methods
 This section will describe the methods of robolt that are available to use. These are organized in seven categories: Create, Read, Update, Delete, Service, File and Special.
 
-<a name="createMethods"></a>
+<a name="create-methods"></a>
 ### Create methods
 Every create method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -74,7 +74,7 @@ this.$API.Create(modelName, documentObject)
 
 
 <br></br>
-<a name="readMethods"></a>
+<a name="read-methods"></a>
 ### Read methods
 Every read method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -93,7 +93,7 @@ this.$API.Read(modelName[, optionsObject ])
 ##### optionsObject:
 | key | type | description | example |
 |:-|:-:|:-:|:-:|
-| filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {Chandler: {$in: friends}} |
+| filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {friends: 'Chandler'} |
 | projection | Array\<String\> | Fields to include in results. Uses MongoDB [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
 | sort | Object | [Mongodb sort](https://docs.mongodb.com/manual/reference/method/cursor.sort/index.html) | { age : 1 } |
 | skip | Number | The number of documents to skip in the results set. | 10 |
@@ -133,16 +133,16 @@ this.$API.Search(modelName[, optionsObject ])
 ##### optionsObject:
 | key | type | description | example |
 |:-|:-:|:-:|:-:|
-| filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {Chandler: {$in: friends}} |
+| filter | Object | [Mongodb query](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.htmls) | {friends: 'Chandler'} |
 | projection | Array\<String\> | Fields to include in results. Uses MongoDB [projection](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html). | ['username', 'friends'] |
 | threshold | Number | [Fuse.js](https://www.npmjs.com/package/fuse.js) threshold, defaults to 0.4 | 0.6 |
 | keys | Array\<String\> | Keys of the document that are searched in. If no keys are provided all keys of the document will be used. | ['username'] |
-| depth | Number | If no keys are provided, we can limit the depth of the keys to be picked from the schema, defaults to Infinity | 2 |
+| depth | Number | If no keys are provided, we can limit the depth of the keys to be picked from the schema, starts from 0, defaults to Infinity | 2 |
 | term | String | Search term that is searched for | 'search term' |
 
 
 <br></br>
-<a name="updateMethods"></a>
+<a name="update-methods"></a>
 ### Update methods
 Every update method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -163,7 +163,7 @@ An object with an _id field containing the ObjectId of the document we want to u
 
 
 <br></br>
-<a name="deleteMethods"></a>
+<a name="delete-methods"></a>
 ### Delete methods
 Every delete method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -181,7 +181,7 @@ this.$API.Delete(modelName, documentId)
 
 
 <br></br>
-<a name="serviceMethods"></a>
+<a name="service-methods"></a>
 ### Service methods
 Every service method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -226,14 +226,14 @@ this.$API.GetService(serviceName, functionName, params)
 
 
 <br></br>
-<a name="fileMethods"></a>
+<a name="file-methods"></a>
 ### File methods
 
 #### UploadFile
 > Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
 
 * Method: POST
-* Returns: Promise\<[RoboFile document](https://www.npmjs.com/package/robogo/#files)\>
+* Returns: Promise\<[RoboFile document](https://www.npmjs.com/package/robogo#working-with-files)\>
 
 ```javascript
 this.$API.UploadFile(file[, percentCallback])
@@ -257,11 +257,11 @@ this.$API.UploadFile(file[, percentCallback])
 this.$API.GetFileURLs(file)
 ```
 ##### file:
-[RoboFile document](https://www.npmjs.com/package/robogo/#files) to the file
+[RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) to the file
 
 <br></br>
 #### GetFile
-> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo.
+> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) from robogo.
 
 * Method: GET
 * Returns: Promise\<File\>
@@ -273,12 +273,12 @@ this.$API.GetFile(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) of the file or its _id|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetFileURL
-> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo and returns a local URL for it.
+> Downloads the file for a [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -290,12 +290,12 @@ this.$API.GetFileURL(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetThumbnail
-> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo.
+> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) from robogo.
 
 * Method: GET
 * Returns: Promise\<File\>
@@ -307,12 +307,12 @@ this.$API.GetThumbnail(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
 #### GetThumbnailURL
-> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo/#files) from robogo and returns a local URL for it.
+> Downloads the thumbnail file for a [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) from robogo and returns a local URL for it.
 
 * Method: GET
 * Returns: Promise\<String\>
@@ -324,7 +324,7 @@ this.$API.GetThumbnailURL(file[, percentCallback])
 ##### Params:
 | key | type | description |
 |:-|:-:|:-:|
-| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id value|
+| file | String/Object | Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) of the file or its _id value|
 | percentCallback | Function | Callback that will be called multiple times, while the file is downloading. Its parameter is a number between 0 and 100 |
 
 <br></br>
@@ -341,11 +341,11 @@ this.$API.DeleteFile(file)
 ```
 
 ##### File:
-Either the whole [RoboFile document](https://www.npmjs.com/package/robogo/#files) of the file or its _id.
+Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#working-with-files) of the file or its _id.
 
 
 <br></br>
-<a name="specialMethods"></a>
+<a name="special-methods"></a>
 ### Special methods
 Every special method returns a Promise that is resolved with the result or rejected with an error.
 
@@ -370,10 +370,12 @@ this.$API.Schema(modelName)
 * Resolves into: Array of Objects
 
 ```javascript
-this.$API.Fields(modelName)
+this.$API.Fields(modelName, depth)
 .then( fields => ... )
 .catch( error => ... )
 ```
+##### depth:
+Number that limits the depth of the fields to be returned. Starts from 0, defaults to Infinity.
 
 <br></br>
 #### Count
