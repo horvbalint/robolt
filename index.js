@@ -154,7 +154,7 @@ export default class __API {
       this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
         params: {filter},
       })
-      .then( res => resolve(res.count) )
+      .then( res => resolve(Number(res)) )
       .catch( err => reject(err) )
     })
   }
