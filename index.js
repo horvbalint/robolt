@@ -78,6 +78,8 @@ export default class __API {
   }
 
   GetFileURLs(file) {
+    if (!file) throw 'Robolt error: FILE MISSING'
+
     let urls = {
       absolutePath: `${this.$axios.defaults.baseURL}/${this.Prefix}/${this.ServeStaticPath}/${file.path}`,
       relativePath: `/${this.Prefix}/${this.ServeStaticPath}/${file.path}`,
@@ -92,6 +94,8 @@ export default class __API {
   }
 
   GetFile(file, percentCallback) {
+    if (!file) throw 'Robolt error: FILE MISSING'
+
     let path = typeof file == 'string' ? file : file.path
     let config = {responseType: 'blob'}
     if(percentCallback)
@@ -126,7 +130,7 @@ export default class __API {
   GetThumbnailURL(file, percentCallback) {
     return new Promise((resolve, reject) => {
       this.GetThumbnail(file, percentCallback)
-        .then( res => resolve(URL.createObjectURL(res)) ) 
+        .then( res => resolve(URL.createObjectURL(res)) )
         .catch( err => reject(err) )
     })
   }
