@@ -78,7 +78,7 @@ export default class __API {
   }
 
   GetFileURLs(file) {
-    if (!file) throw 'Robolt error: FILE MISSING'
+    if (!file) throw 'Robolt error: FILE PARAMETER MISSING'
 
     let urls = {
       absolutePath: `${this.$axios.defaults.baseURL}/${this.Prefix}/${this.ServeStaticPath}/${file.path}`,
@@ -94,7 +94,7 @@ export default class __API {
   }
 
   GetFile(file, percentCallback) {
-    if (!file) throw 'Robolt error: FILE MISSING'
+    if (!file) throw 'Robolt error: FILE PARAMETER MISSING'
 
     let path = typeof file == 'string' ? file : file.path
     let config = {responseType: 'blob'}
