@@ -349,6 +349,20 @@ Either the whole [RoboFile document](https://www.npmjs.com/package/robogo#workin
 ### Special methods
 Every special method returns a Promise that is resolved with the result or rejected with an error.
 
+<a name="model"></a>
+####  Model
+>Sends a GET request to the '/model' or the 'model/:model' route of robogo, depending on wether the modelName parameter was given.
+
+* Method: GET
+* Resolves into: Array\<Object\>|Object
+
+```javascript
+this.$API.Model(modelName)
+.then( model => ... )
+.catch( error => ... )
+```
+
+<br></br>
 <a name="schema"></a>
 ####  Schema
 >Sends a GET request to the '/schema/:model' route of robogo.
@@ -376,6 +390,19 @@ this.$API.Fields(modelName, depth)
 ```
 ##### depth:
 Number that limits the depth of the fields to be returned. Starts from 0, defaults to Infinity.
+
+<br></br>
+####  RecycledSchema
+>Returns the same result as the [Schema](#schema) method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
+
+* Method: GET
+* Resolves into: Object
+
+```javascript
+this.$API.RecycledSchema(modelName)
+.then( schema => ... )
+.catch( error => ... )
+```
 
 <br></br>
 #### Count

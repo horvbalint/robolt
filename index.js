@@ -137,6 +137,13 @@ export default class __API {
     return this.$axios.$delete(`/${this.Prefix}/filedelete/${id}`)
   }
 
+  Model(modelName = null) {
+    if(!modelName)
+      return this.$axios.$get(`/${this.Prefix}/model`)
+    else
+      return this.$axios.$get(`/${this.Prefix}/model/${modelName}`)
+  }
+
   Schema(modelName) {
     return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
   }
@@ -163,5 +170,32 @@ export default class __API {
     return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
       params: {depth},
     })
+  }
+
+  RecycledSchema(modelname) {
+    return new Promise((resolve, reject) => {
+      this.Schema(modelname)
+        .then( fields => {
+          recycleSchemaField({subfields: fields})
+          resolve(fields)
+        })
+        .catch(reject)
+    })
+  }
+}
+
+function recycleSchemaField(field, processedRefs = {}) {
+  if(field.ref) {
+    if(!processedRefs[field.ref])
+      processedRefs[field.ref] = field.subfields
+    else {
+      field.subfields = processedRefs[field.ref]
+      return
+    }
+  }
+
+  if(field.subfields) {
+    for(let f of field.subfields)
+      recycleSchemaField(f, processedRefs)
   }
 }
