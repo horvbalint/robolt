@@ -101,6 +101,11 @@ export default class __API {
       }
 
     return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
+      .then( blob => {
+        let name = file.name // if only the id was given (so file is a string), this will be undefined, but we can't do better
+
+        return new File([blob], name)
+      })
   }
 
   GetFileURL(file, percentCallback) {
@@ -126,7 +131,7 @@ export default class __API {
   GetThumbnailURL(file, percentCallback) {
     return new Promise((resolve, reject) => {
       this.GetThumbnail(file, percentCallback)
-        .then( res => resolve(URL.createObjectURL(res)) ) 
+        .then( res => resolve(URL.createObjectURL(res)) )
         .catch( err => reject(err) )
     })
   }
@@ -172,15 +177,51 @@ export default class __API {
     })
   }
 
-  RecycledSchema(modelname) {
-    return new Promise((resolve, reject) => {
-      this.Schema(modelname)
-        .then( fields => {
-          recycleSchemaField({subfields: fields})
-          resolve(fields)
-        })
-        .catch(reject)
-    })
+  RecycledSchema(modelName) {
+    return this.Schema(modelName)
+      .then( fields => {
+        recycleSchemaField({subfields: fields})
+        return fields
+      })
+  }
+
+  Accesses(modelName) {
+    return this.$axios.$get(`${this.Prefix}/accesses/${modelName}`)
+      .then( accesses => new Accesses(accesses) )
+  }
+}
+
+class Accesses {
+  constructor(accesses) {
+    this.model = accesses.model
+    this.fields = accesses.fields
+
+    Object.freeze(this.model)
+    Object.freeze(this.fields)
+  }
+
+  canReadModel() {
+    return this.model.read
+  }
+
+  canWriteModel() {
+    return this.model.write
+  }
+
+  canCreateModel() {
+    return this.model.writeAllRequired
+  }
+
+  canReadField(path) {
+    if(!this.fields[path]) return false
+
+    return this.fields[path].read || false
+  }
+
+  canWriteField(path) {
+    if(!this.fields[path]) return false
+    
+    return this.fields[path].write || false
   }
 }
 
