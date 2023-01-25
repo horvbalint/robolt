@@ -189,6 +189,11 @@ export default class __API {
     return this.$axios.$get(`${this.Prefix}/accesses/${modelName}`)
       .then( accesses => new Accesses(accesses) )
   }
+
+  AccessGroups() {
+    return this.$axios.$get(`${this.Prefix}/accessesGroups`)
+      .then( accesses => new AccessGroups(accesses) )
+  }
 }
 
 class Accesses {
@@ -222,6 +227,22 @@ class Accesses {
     if(!this.fields[path]) return false
     
     return this.fields[path].write || false
+  }
+}
+
+class AccessGroups {
+  constructor(accessGroups) {
+    this.accessGroups = accessGroups
+  }
+
+  check(groups) {
+    if(!Array.isArray(groups)) groups = [group]
+
+    for(let group of groups) {
+      if(!this.accessGroups.includes(group)) {
+        console.warn(`Unkown access group: ${group}`)
+      }
+    }
   }
 }
 
