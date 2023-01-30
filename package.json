@@ -1,6 +1,6 @@
 {
   "name": "robolt",
-  "version": "0.2.3",
+  "version": "0.3.3",
   "description": "a frontend helper class for projects using Robogo and Axios",
   "main": "index.js",
   "scripts": {
