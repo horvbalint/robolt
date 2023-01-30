@@ -136,6 +136,12 @@ export default class __API {
     })
   }
 
+  CloneFile(file) {
+    let id = typeof file == 'string' ? file : file._id
+ 
+    return this.$axios.$post(`/${this.Prefix}/fileclone/${id}`)
+  }
+
   DeleteFile(file) {
     let id = typeof file == 'string' ? file : file._id
 
