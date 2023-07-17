@@ -6,33 +6,39 @@ export default class __API {
     this.DefaultFilter = defaultFilter
   }
 
-  Create(modelName, data) {
-    return this.$axios.$post(`/${this.Prefix}/create/${modelName}`, data)
+  Create(modelName, data, axiosConfig = {}) {
+    return this.$axios.$post(`/${this.Prefix}/create/${modelName}`, data, axiosConfig)
   }
 
-  Read(modelName, options = {}) {
+  Read(modelName, options = {}, axiosConfig = {params: {}}) {
     return this.$axios.$get(`/${this.Prefix}/read/${modelName}`, {
+      ...axiosConfig,
       params: {
+        ...axiosConfig.params,
         filter: options.filter || this.DefaultFilter,
         projection: options.projection,
         sort: options.sort || {},
         skip: options.skip,
         limit: options.limit,
-      }
+      },
     })
   }
 
-  Get(modelName, id, options = {}) {
+  Get(modelName, id, options = {}, axiosConfig = {params: {}}) {
     return this.$axios.$get(`/${this.Prefix}/get/${modelName}/${id}`, {
+      ...axiosConfig,
       params: {
+        ...axiosConfig.params,
         projection: options.projection,
       }
     })
   }
 
-  Search(modelName, options = {}) {
+  Search(modelName, options = {}, axiosConfig = {params: {}}) {
     return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
+      ...axiosConfig,
       params: {
+        ...axiosConfig.params,
         filter: options.filter || this.DefaultFilter,
         projection: options.projection,
         threshold: options.threshold,
@@ -43,28 +49,37 @@ export default class __API {
     })
   }
 
-  Update(modelName, data) {
-    return this.$axios.$patch(`/${this.Prefix}/update/${modelName}`, data)
+  Update(modelName, data, axiosConfig = {}) {
+    return this.$axios.$patch(`/${this.Prefix}/update/${modelName}`, data, axiosConfig)
   }
 
-  Delete(modelName, id) {
-    return this.$axios.$delete(`/${this.Prefix}/delete/${modelName}/${id}`)
+  Delete(modelName, id, axiosConfig = {params: {}}) {
+    return this.$axios.$delete(`/${this.Prefix}/delete/${modelName}/${id}`, axiosConfig)
   }
 
-  RunService(serviceName, functionName, params) {
-    return this.$axios.$post(`/${this.Prefix}/runner/${serviceName}/${functionName}`, params)
+  RunService(serviceName, functionName, params, axiosConfig = {}) {
+    return this.$axios.$post(`/${this.Prefix}/runner/${serviceName}/${functionName}`, params, axiosConfig)
   }
 
-  GetService(serviceName, functionName, params) {
+  GetService(serviceName, functionName, params, axiosConfig = {params: {}}) {
     return this.$axios.$get(`/${this.Prefix}/getter/${serviceName}/${functionName}`, {
-      params: params,
+      ...axiosConfig,
+      params: {
+        ...axiosConfig.params,
+        ...params,
+      },
     })
   }
 
-  UploadFile(file, percentCallback) {
+  UploadFile(file, percentCallback, axiosConfig = {headers: {}}) {
     let config = {
-      headers: {'Content-Type': 'multipart/form-data'},
+      ...axiosConfig,
+      headers: {
+        ...axiosConfig.headers,
+        'Content-Type': 'multipart/form-data',
+      },
     }
+
     if(percentCallback)
       config.onUploadProgress = event => {
         let percentage = Math.round((event.loaded * 100) / event.total)
@@ -91,9 +106,13 @@ export default class __API {
     return urls
   }
 
-  GetFile(file, percentCallback) {
+  GetFile(file, percentCallback, axiosConfig = {}) {
     let path = typeof file == 'string' ? file : file.path
-    let config = {responseType: 'blob'}
+    let config = {
+      ...axiosConfig,
+      responseType: 'blob'
+    }
+
     if(percentCallback)
       config.onDownloadProgress = event => {
         let percentage = Math.round((event.loaded * 100) / event.total)
@@ -108,17 +127,21 @@ export default class __API {
       })
   }
 
-  GetFileURL(file, percentCallback) {
+  GetFileURL(file, percentCallback, axiosConfig) {
     return new Promise((resolve, reject) => {
-      this.GetFile(file, percentCallback)
+      this.GetFile(file, percentCallback, axiosConfig)
         .then( res => resolve(URL.createObjectURL(res)) )
         .catch( err => reject(err) )
     })
   }
 
-  GetThumbnail(file, percentCallback) {
+  GetThumbnail(file, percentCallback, axiosConfig = {}) {
     let path = typeof file == 'string' ? file : file.thumbnailPath
-    let config = {responseType: 'blob'}
+    let config = {
+      ...axiosConfig,
+      responseType: 'blob',
+    }
+
     if(percentCallback)
       config.onDownloadProgress = event => {
         let percentage = Math.round((event.loaded * 100) / event.total)
@@ -128,76 +151,86 @@ export default class __API {
     return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
   }
 
-  GetThumbnailURL(file, percentCallback) {
+  GetThumbnailURL(file, percentCallback, axiosConfig) {
     return new Promise((resolve, reject) => {
-      this.GetThumbnail(file, percentCallback)
+      this.GetThumbnail(file, percentCallback, axiosConfig)
         .then( res => resolve(URL.createObjectURL(res)) )
         .catch( err => reject(err) )
     })
   }
 
-  CloneFile(file) {
+  CloneFile(file, axiosConfig = {}) {
     let id = typeof file == 'string' ? file : file._id
  
-    return this.$axios.$post(`/${this.Prefix}/fileclone/${id}`)
+    return this.$axios.$post(`/${this.Prefix}/fileclone/${id}`, axiosConfig)
   }
 
-  DeleteFile(file) {
+  DeleteFile(file, axiosConfig = {}) {
     let id = typeof file == 'string' ? file : file._id
 
-    return this.$axios.$delete(`/${this.Prefix}/filedelete/${id}`)
+    return this.$axios.$delete(`/${this.Prefix}/filedelete/${id}`, axiosConfig)
   }
 
-  Model(modelName = null) {
+  Model(modelName = null, axiosConfig = {}) {
     if(!modelName)
-      return this.$axios.$get(`/${this.Prefix}/model`)
+      return this.$axios.$get(`/${this.Prefix}/model`, axiosConfig)
     else
-      return this.$axios.$get(`/${this.Prefix}/model/${modelName}`)
+      return this.$axios.$get(`/${this.Prefix}/model/${modelName}`, axiosConfig)
   }
 
-  Schema(modelName) {
-    return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
+  Schema(modelName, axiosConfig = {}) {
+    return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`, axiosConfig)
   }
 
-  Fields(modelName, depth) {
+  Fields(modelName, depth, axiosConfig = {params: {}}) {
     return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`, {
+      ...axiosConfig,
       params: {
+        ...axiosConfig.params,
         depth
       }
     })
   }
 
-  Count(modelName, filter = this.DefaultFilter) {
+  Count(modelName, filter = this.DefaultFilter, axiosConfig = {params: {}}) {
     return new Promise((resolve, reject) => {
       this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
-        params: {filter},
+        ...axiosConfig,
+        params: {
+          ...axiosConfig.params,
+          filter,
+        },
       })
       .then( res => resolve(Number(res)) )
       .catch( err => reject(err) )
     })
   }
 
-  SearchKeys(modelName, depth) {
+  SearchKeys(modelName, depth, axiosConfig = {params: {}}) {
     return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
-      params: {depth},
+      ...axiosConfig,
+      params: {
+        ...axiosConfig.params,
+        depth
+      },
     })
   }
 
-  RecycledSchema(modelName) {
-    return this.Schema(modelName)
+  RecycledSchema(modelName, axiosConfig) {
+    return this.Schema(modelName, axiosConfig)
       .then( fields => {
         recycleSchemaField({subfields: fields})
         return fields
       })
   }
 
-  Accesses(modelName) {
-    return this.$axios.$get(`${this.Prefix}/accesses/${modelName}`)
+  Accesses(modelName, axiosConfig = {}) {
+    return this.$axios.$get(`${this.Prefix}/accesses/${modelName}`, axiosConfig)
       .then( accesses => new Accesses(accesses) )
   }
 
-  AccessGroups() {
-    return this.$axios.$get(`${this.Prefix}/accessesGroups`)
+  AccessGroups(axiosConfig = {}) {
+    return this.$axios.$get(`${this.Prefix}/accessesGroups`, axiosConfig)
       .then( accesses => new AccessGroups(accesses) )
   }
 }
@@ -242,7 +275,7 @@ class AccessGroups {
   }
 
   check(groups) {
-    if(!Array.isArray(groups)) groups = [group]
+    if(!Array.isArray(groups)) groups = [groups]
 
     for(let group of groups) {
       if(!this.accessGroups.includes(group)) {
