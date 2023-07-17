@@ -13,9 +13,9 @@ export default class __API {
   Read(modelName, options = {}) {
     return this.$axios.$get(`/${this.Prefix}/read/${modelName}`, {
       params: {
-        filter: options.filter || this.DefaultFilter,
+        filter: JSON.stringify(options.filter || this.DefaultFilter),
         projection: options.projection,
-        sort: options.sort || {},
+        sort: JSON.stringify(options.sort || {}),
         skip: options.skip,
         limit: options.limit,
       }
@@ -33,7 +33,7 @@ export default class __API {
   Search(modelName, options = {}) {
     return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
       params: {
-        filter: options.filter || this.DefaultFilter,
+        filter: JSON.stringify(options.filter || this.DefaultFilter),
         projection: options.projection,
         threshold: options.threshold,
         keys: options.keys,
@@ -170,7 +170,9 @@ export default class __API {
   Count(modelName, filter = this.DefaultFilter) {
     return new Promise((resolve, reject) => {
       this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
-        params: {filter},
+        params: {
+          filter: JSON.stringify(filter)
+        },
       })
       .then( res => resolve(Number(res)) )
       .catch( err => reject(err) )
