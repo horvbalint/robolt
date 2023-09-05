@@ -24,10 +24,8 @@
   ],
   "license": "Apache-2.0",
   "author": "horvbalint",
-  "dependencies": {
-    "@types/axios": "^0.14.0"
-  },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "typescript": "^5.2.2"
   }
 }
