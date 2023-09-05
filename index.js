@@ -153,9 +153,14 @@ export default class __API {
   }
 
   /**
-   * 
-   * @param {*} file 
-   * @returns 
+   * Returns the file's absolute and relative URLs where it is static hosted by robogo. If a thumbnail was also created it also returns the thumbnail's URLs.
+   * @param {object} file RoboFile instance object
+   * @returns {{
+   *  absolutePath: string,
+   *  relativePath: string,
+   *  absoluteThumbnailPath?: string,
+   *  relativeThumbnailPath?: string,
+   * }}
    */
   GetFileURLs(file) {
     let urls = {
@@ -171,8 +176,15 @@ export default class __API {
     return urls
   }
 
+  /**
+   * Downloads the file for a RoboFile document from robogo.
+   * @param {object} file RoboFile instance object
+   * @param {(percent: number, event: any) => {}} percentCallback 
+   * @returns {Promise<File>}
+   */
   async GetFile(file, percentCallback) {
     let path = typeof file == 'string' ? file : file.path
+
     let config = {responseType: 'blob'}
     if(percentCallback)
       config.onDownloadProgress = event => {
@@ -180,20 +192,30 @@ export default class __API {
         percentCallback(percentage, event)
       }
 
+    // @ts-ignore - for some reason the responseType 'blob' is not recognized as a valid ResponseType
     const response = await this.$axios.get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
 
     let name = file.name // if only the id was given (so file is a string), this will be undefined, but we can't do better
     return new File([response.data], name)
   }
 
-  GetFileURL(file, percentCallback) {
-    return new Promise((resolve, reject) => {
-      this.GetFile(file, percentCallback)
-        .then( res => resolve(URL.createObjectURL(res)) )
-        .catch( err => reject(err) )
-    })
+  /**
+   * Downloads the file for a RoboFile document from robogo and returns a local URL for it.
+   * @param {object} file RoboFile instance object
+   * @param {(percent: number, event: any) => {}} percentCallback 
+   * @returns {Promise<string>}
+   */
+  async GetFileURL(file, percentCallback) {
+    const res = await this.GetFile(file, percentCallback)
+    return URL.createObjectURL(res)
   }
 
+  /**
+   * Downloads the thumbnail file for a RoboFile document from robogo.
+   * @param {object} file RoboFile instance object
+   * @param {(percent: number, event: any) => {}} percentCallback 
+   * @returns {Promise<File>}
+   */
   async GetThumbnail(file, percentCallback) {
     let path = typeof file == 'string' ? file : file.thumbnailPath
     let config = {responseType: 'blob'}
@@ -203,18 +225,27 @@ export default class __API {
         percentCallback(percentage, event)
       }
 
+    // @ts-ignore - for some reason the responseType 'blob' is not recognized as a valid ResponseType
     const response = await this.$axios.get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
     return response.data
   }
 
-  GetThumbnailURL(file, percentCallback) {
-    return new Promise((resolve, reject) => {
-      this.GetThumbnail(file, percentCallback)
-        .then( res => resolve(URL.createObjectURL(res)) )
-        .catch( err => reject(err) )
-    })
+  /**
+   * Downloads the thumbnail file for a RoboFile document from robogo and returns a local URL for it.
+   * @param {object} file RoboFile instance object
+   * @param {(percent: number, event: any) => {}} percentCallback 
+   * @returns {Promise<string>}
+   */
+  async GetThumbnailURL(file, percentCallback) {
+    const res = await this.GetThumbnail(file, percentCallback)
+    return URL.createObjectURL(res)
   }
 
+  /**
+   * Sends a POST request to the '/fileclone/:id' route of robogo with the given file id.
+   * @param {object|string} file RoboFile instance object or its _id
+   * @returns {Promise<File>}
+   */
   async CloneFile(file) {
     let id = typeof file == 'string' ? file : file._id
  
@@ -222,6 +253,11 @@ export default class __API {
     return response.data
   }
 
+  /**
+   * Sends a DELETE request to the '/filedelete/:id' route of robogo with the given file id.
+   * @param {object|string} file RoboFile instance object or its _id
+   * @returns {Promise}
+   */
   async DeleteFile(file) {
     let id = typeof file == 'string' ? file : file._id
 
@@ -229,6 +265,11 @@ export default class __API {
     return response.data
   }
 
+  /**
+   * Sends a GET request to the '/model' or the 'model/:model' route of robogo, depending on wether the modelName parameter was given.
+   * @param {string|null} [modelName] 
+   * @returns {Promise<object|object[]>}
+   */
   async Model(modelName = null) {
     if(!modelName)
       return (await this.$axios.get(`/${this.Prefix}/model`)).data
@@ -236,11 +277,22 @@ export default class __API {
       return (await this.$axios.get(`/${this.Prefix}/model/${modelName}`)).data
   }
 
+  /**
+   * Sends a GET request to the '/schema/:model' route of robogo.
+   * @param {string} modelName 
+   * @returns {Promise<object>}
+   */
   async Schema(modelName) {
     const response = await this.$axios.get(`/${this.Prefix}/schema/${modelName}`)
     return response.data
   }
 
+  /**
+   * Sends a GET request to the '/fields/:model' route of robogo.
+   * @param {string} modelName 
+   * @param {number} [depth] 
+   * @returns {Promise<object>}
+   */
   async Fields(modelName, depth) {
     const response = await this.$axios.get(`/${this.Prefix}/fields/${modelName}`, {
       params: {
@@ -251,6 +303,12 @@ export default class __API {
     return response.data
   }
 
+  /**
+   * Sends a GET request to the '/count/:model' route of robogo.
+   * @param {string} modelName 
+   * @param {object} filter 
+   * @returns {Promise<number>}
+   */
   async Count(modelName, filter) {
     const response = await this.$axios.get(`${this.Prefix}/count/${modelName}`, {
       params: {
@@ -261,27 +319,31 @@ export default class __API {
     return response.data
   }
 
-  async SearchKeys(modelName, depth) {
-    const response =await this.$axios.get(`${this.Prefix}/searchkeys/${modelName}`, {
-      params: {depth},
-    })
-
-    return response.data
+  /**
+   * Returns the same result as the Schema method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
+   * @param {string} modelName 
+   * @returns {Promise<object>}
+   */
+  async RecycledSchema(modelName) {
+    const fields = await this.Schema(modelName)
+    recycleSchemaField({subfields: fields})
+    return fields
   }
 
-  RecycledSchema(modelName) {
-    return this.Schema(modelName)
-      .then( fields => {
-        recycleSchemaField({subfields: fields})
-        return fields
-      })
-  }
-
+  /**
+   * Sends a GET request to the '/accesses/:modelName' route of robogo.
+   * @param {string} modelName 
+   * @returns {Promise<Accesses>}
+   */
   async Accesses(modelName) {
     const response = await this.$axios.get(`${this.Prefix}/accesses/${modelName}`)
     return new Accesses(response.data)
   }
 
+  /**
+   * Sends a GET request to the '/accessGroups' route of robogo.
+   * @returns {Promise<AccessGroups>}
+   */
   async AccessGroups() {
     const response = await this.$axios.get(`${this.Prefix}/accessesGroups`)
     return new AccessGroups(response.data)
@@ -328,7 +390,7 @@ class AccessGroups {
   }
 
   check(groups) {
-    if(!Array.isArray(groups)) groups = [group]
+    if(!Array.isArray(groups)) groups = [groups]
 
     for(let group of groups) {
       if(!this.accessGroups.includes(group)) {
@@ -338,6 +400,11 @@ class AccessGroups {
   }
 }
 
+/**
+ * @param {object} field 
+ * @param {object} processedRefs 
+ * @returns
+ */
 function recycleSchemaField(field, processedRefs = {}) {
   if(field.ref) {
     if(!processedRefs[field.ref])
