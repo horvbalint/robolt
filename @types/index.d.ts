@@ -5,7 +5,7 @@
  * @typedef Document
  * @prop {string} _id
  */
-export default class __API {
+export default class Robolt {
     /**
      * @param {AxiosInstance} axios A preconfigured axios instance
      * @param {string} prefix The prefix that was used when the routes of robogo were registered to express.js
