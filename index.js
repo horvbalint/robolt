@@ -1,67 +1,141 @@
+// @ts-check
+
+/**
+ * @typedef {import('axios').AxiosInstance} AxiosInstance
+ */
+
+/**
+ * @typedef Document
+ * @prop {string} _id
+ */
+
 export default class __API {
-  constructor(axios, prefix, serveStaticPath = 'static', defaultFilter = {}) {
+  /**
+   * @param {AxiosInstance} axios A preconfigured axios instance
+   * @param {string} prefix The prefix that was used when the routes of robogo were registered to express.js
+   * @param {string} [serveStaticPath='static'] The path where the files are static hosted. Same as in the constructor of robogo
+   */
+  constructor(axios, prefix, serveStaticPath = 'static') {
     this.$axios = axios
     this.Prefix = prefix
     this.ServeStaticPath = serveStaticPath
-    this.DefaultFilter = defaultFilter
   }
 
-  Create(modelName, data) {
-    return this.$axios.$post(`/${this.Prefix}/create/${modelName}`, data)
+  /**
+   * Sends a POST request to the '/create/:model' route of robogo with the given data.
+   * @param {string} modelName Name of the model registered in robogo
+   * @param {object} data Object matching the schema of the model
+   * @returns {Promise<Document>} The created document
+   */
+  async Create(modelName, data) {
+    const response = await this.$axios.post(`/${this.Prefix}/create/${modelName}`, data)
+    return response.data
   }
 
-  Read(modelName, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/read/${modelName}`, {
+  /**
+   * @typedef ReadOptions
+   * @prop {object} filter Mongodb query
+   * @prop {Array<string>} [projection] Fields to include in results. Uses MongoDB projection.
+   * @prop {object} [sort] Mongodb sort - https://docs.mongodb.com/manual/reference/method/cursor.sort/index.html
+   * @prop {number} [skip] The number of documents to skip in the results set.
+   * @prop {number} [limit] The number of documents to include in the results set.
+   */
+  /**
+   * Sends a GET request to the '/read/:model' route of robogo with the given data.
+   * @param {string} modelName 
+   * @param {ReadOptions} options 
+   * @returns {Promise<Array<Document>>}
+   */
+  async Read(modelName, options = {filter: {}}) {
+    const response = await this.$axios.get(`/${this.Prefix}/read/${modelName}`, {
       params: {
-        filter: JSON.stringify(options.filter || this.DefaultFilter),
+        filter: JSON.stringify(options.filter),
         projection: options.projection,
         sort: JSON.stringify(options.sort || {}),
         skip: options.skip,
         limit: options.limit,
       }
     })
+    
+    return response.data
   }
 
-  Get(modelName, id, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/get/${modelName}/${id}`, {
+  /**
+   * @typedef GetOptions
+   * @prop {Array<string>} [projection] Fields to include in results. Uses MongoDB projection.
+   */
+  /**
+   * Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
+   * @param {string} modelName 
+   * @param {string} id 
+   * @param {GetOptions} options 
+   * @returns {Promise<Document|null>}
+   */
+  async Get(modelName, id, options = {}) {
+    const response = await this.$axios.get(`/${this.Prefix}/get/${modelName}/${id}`, {
       params: {
         projection: options.projection,
       }
     })
+
+    return response.data
   }
 
-  Search(modelName, options = {}) {
-    return this.$axios.$get(`/${this.Prefix}/search/${modelName}`, {
-      params: {
-        filter: JSON.stringify(options.filter || this.DefaultFilter),
-        projection: options.projection,
-        threshold: options.threshold,
-        keys: options.keys,
-        depth: options.depth,
-        term: options.term,
-      }
-    })
+  /**
+   * Sends a PATCH request to the '/update/:model' route of robogo with the given data.
+   * @param {string} modelName 
+   * @param {Document} data 
+   * @returns {Promise<object>} The result of the MongoDB update operation
+   */
+  async Update(modelName, data) {
+    const response = await this.$axios.patch(`/${this.Prefix}/update/${modelName}`, data)
+    return response.data
   }
 
-  Update(modelName, data) {
-    return this.$axios.$patch(`/${this.Prefix}/update/${modelName}`, data)
+  /**
+   * Sends a DELETE request to the '/delete/:model/:id' route of robogo with the given document _id.
+   * @param {string} modelName 
+   * @param {string} id 
+   * @returns {Promise}
+   */
+  async Delete(modelName, id) {
+    const response = await this.$axios.delete(`/${this.Prefix}/delete/${modelName}/${id}`)
+    return response.data
   }
 
-  Delete(modelName, id) {
-    return this.$axios.$delete(`/${this.Prefix}/delete/${modelName}/${id}`)
+  /**
+   * Sends a POST request to the '/runner/:service/:function' route of robogo with the given data.
+   * @param {string} serviceName 
+   * @param {string} functionName 
+   * @param {object} params 
+   * @returns {Promise}
+   */
+  async RunService(serviceName, functionName, params) {
+    const response = await this.$axios.post(`/${this.Prefix}/runner/${serviceName}/${functionName}`, params)
+    return response.data
   }
 
-  RunService(serviceName, functionName, params) {
-    return this.$axios.$post(`/${this.Prefix}/runner/${serviceName}/${functionName}`, params)
-  }
-
-  GetService(serviceName, functionName, params) {
-    return this.$axios.$get(`/${this.Prefix}/getter/${serviceName}/${functionName}`, {
+  /**
+   * Sends a GET request to the '/getter/:service/:function' route of robogo with the given data.
+   * @param {string} serviceName 
+   * @param {string} functionName 
+   * @param {object} params 
+   * @returns {Promise}
+   */
+  async GetService(serviceName, functionName, params) {
+    const response = await this.$axios.get(`/${this.Prefix}/getter/${serviceName}/${functionName}`, {
       params: params,
     })
+    return response.data
   }
 
-  UploadFile(file, percentCallback) {
+  /**
+   * Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
+   * @param {File} file 
+   * @param {(percent: number, event: any) => {}} percentCallback 
+   * @returns 
+   */
+  async UploadFile(file, percentCallback) {
     let config = {
       headers: {'Content-Type': 'multipart/form-data'},
     }
@@ -74,9 +148,15 @@ export default class __API {
     let formData = new FormData()
     formData.append('file', file)
 
-    return this.$axios.$post(`/${this.Prefix}/fileupload`, formData, config)
+    const response = await this.$axios.post(`/${this.Prefix}/fileupload`, formData, config)
+    return response.data
   }
 
+  /**
+   * 
+   * @param {*} file 
+   * @returns 
+   */
   GetFileURLs(file) {
     let urls = {
       absolutePath: `${this.$axios.defaults.baseURL}/${this.Prefix}/${this.ServeStaticPath}/${file.path}`,
@@ -91,7 +171,7 @@ export default class __API {
     return urls
   }
 
-  GetFile(file, percentCallback) {
+  async GetFile(file, percentCallback) {
     let path = typeof file == 'string' ? file : file.path
     let config = {responseType: 'blob'}
     if(percentCallback)
@@ -100,12 +180,10 @@ export default class __API {
         percentCallback(percentage, event)
       }
 
-    return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
-      .then( blob => {
-        let name = file.name // if only the id was given (so file is a string), this will be undefined, but we can't do better
+    const response = await this.$axios.get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
 
-        return new File([blob], name)
-      })
+    let name = file.name // if only the id was given (so file is a string), this will be undefined, but we can't do better
+    return new File([response.data], name)
   }
 
   GetFileURL(file, percentCallback) {
@@ -116,7 +194,7 @@ export default class __API {
     })
   }
 
-  GetThumbnail(file, percentCallback) {
+  async GetThumbnail(file, percentCallback) {
     let path = typeof file == 'string' ? file : file.thumbnailPath
     let config = {responseType: 'blob'}
     if(percentCallback)
@@ -125,7 +203,8 @@ export default class __API {
         percentCallback(percentage, event)
       }
 
-    return this.$axios.$get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
+    const response = await this.$axios.get(`/${this.Prefix}/${this.ServeStaticPath}/${path}`, config)
+    return response.data
   }
 
   GetThumbnailURL(file, percentCallback) {
@@ -136,53 +215,58 @@ export default class __API {
     })
   }
 
-  CloneFile(file) {
+  async CloneFile(file) {
     let id = typeof file == 'string' ? file : file._id
  
-    return this.$axios.$post(`/${this.Prefix}/fileclone/${id}`)
+    const response = await this.$axios.post(`/${this.Prefix}/fileclone/${id}`)
+    return response.data
   }
 
-  DeleteFile(file) {
+  async DeleteFile(file) {
     let id = typeof file == 'string' ? file : file._id
 
-    return this.$axios.$delete(`/${this.Prefix}/filedelete/${id}`)
+    const response = await this.$axios.delete(`/${this.Prefix}/filedelete/${id}`)
+    return response.data
   }
 
-  Model(modelName = null) {
+  async Model(modelName = null) {
     if(!modelName)
-      return this.$axios.$get(`/${this.Prefix}/model`)
+      return (await this.$axios.get(`/${this.Prefix}/model`)).data
     else
-      return this.$axios.$get(`/${this.Prefix}/model/${modelName}`)
+      return (await this.$axios.get(`/${this.Prefix}/model/${modelName}`)).data
   }
 
-  Schema(modelName) {
-    return this.$axios.$get(`/${this.Prefix}/schema/${modelName}`)
+  async Schema(modelName) {
+    const response = await this.$axios.get(`/${this.Prefix}/schema/${modelName}`)
+    return response.data
   }
 
-  Fields(modelName, depth) {
-    return this.$axios.$get(`/${this.Prefix}/fields/${modelName}`, {
+  async Fields(modelName, depth) {
+    const response = await this.$axios.get(`/${this.Prefix}/fields/${modelName}`, {
       params: {
         depth
       }
     })
+
+    return response.data
   }
 
-  Count(modelName, filter = this.DefaultFilter) {
-    return new Promise((resolve, reject) => {
-      this.$axios.$get(`${this.Prefix}/count/${modelName}`, {
-        params: {
-          filter: JSON.stringify(filter)
-        },
-      })
-      .then( res => resolve(Number(res)) )
-      .catch( err => reject(err) )
+  async Count(modelName, filter) {
+    const response = await this.$axios.get(`${this.Prefix}/count/${modelName}`, {
+      params: {
+        filter: JSON.stringify(filter)
+      },
     })
+
+    return response.data
   }
 
-  SearchKeys(modelName, depth) {
-    return this.$axios.$get(`${this.Prefix}/searchkeys/${modelName}`, {
+  async SearchKeys(modelName, depth) {
+    const response =await this.$axios.get(`${this.Prefix}/searchkeys/${modelName}`, {
       params: {depth},
     })
+
+    return response.data
   }
 
   RecycledSchema(modelName) {
@@ -193,14 +277,14 @@ export default class __API {
       })
   }
 
-  Accesses(modelName) {
-    return this.$axios.$get(`${this.Prefix}/accesses/${modelName}`)
-      .then( accesses => new Accesses(accesses) )
+  async Accesses(modelName) {
+    const response = await this.$axios.get(`${this.Prefix}/accesses/${modelName}`)
+    return new Accesses(response.data)
   }
 
-  AccessGroups() {
-    return this.$axios.$get(`${this.Prefix}/accessesGroups`)
-      .then( accesses => new AccessGroups(accesses) )
+  async AccessGroups() {
+    const response = await this.$axios.get(`${this.Prefix}/accessesGroups`)
+    return new AccessGroups(response.data)
   }
 }
 
