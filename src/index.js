@@ -36,9 +36,10 @@ export default class Robolt {
 
   /**
    * Sends a POST request to the '/create/:model' route of robogo with the given data.
+   * @template {Document} T
    * @param {string} modelName Name of the model registered in robogo
-   * @param {object} data Object matching the schema of the model
-   * @returns {Promise<Document>} The created document
+   * @param {Omit<T, '_id'>} data Object matching the schema of the model
+   * @returns {Promise<T>} The created document
    */
   async Create(modelName, data) {
     const response = await this.$axios.post(`/${this.Prefix}/create/${modelName}`, data)
@@ -55,9 +56,10 @@ export default class Robolt {
    */
   /**
    * Sends a GET request to the '/read/:model' route of robogo with the given data.
+   * @template {Document} T
    * @param {string} modelName 
    * @param {ReadOptions} options 
-   * @returns {Promise<Array<Document>>}
+   * @returns {Promise<Array<T>>}
    */
   async Read(modelName, options = {filter: {}}) {
     const response = await this.$axios.get(`/${this.Prefix}/read/${modelName}`, {
@@ -79,10 +81,11 @@ export default class Robolt {
    */
   /**
    * Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
+   * @template {Document} T
    * @param {string} modelName 
    * @param {string} id 
    * @param {GetOptions} options 
-   * @returns {Promise<Document|null>}
+   * @returns {Promise<T|null>}
    */
   async Get(modelName, id, options = {}) {
     const response = await this.$axios.get(`/${this.Prefix}/get/${modelName}/${id}`, {
@@ -96,8 +99,9 @@ export default class Robolt {
 
   /**
    * Sends a PATCH request to the '/update/:model' route of robogo with the given data.
+   * @template {Document} T
    * @param {string} modelName 
-   * @param {Document} data 
+   * @param {Partial<T> & Document} data 
    * @returns {Promise<object>} The result of the MongoDB update operation
    */
   async Update(modelName, data) {

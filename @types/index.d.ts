@@ -29,11 +29,12 @@ export default class Robolt {
     ServeStaticPath: string;
     /**
      * Sends a POST request to the '/create/:model' route of robogo with the given data.
+     * @template {Document} T
      * @param {string} modelName Name of the model registered in robogo
-     * @param {object} data Object matching the schema of the model
-     * @returns {Promise<Document>} The created document
+     * @param {Omit<T, '_id'>} data Object matching the schema of the model
+     * @returns {Promise<T>} The created document
      */
-    Create(modelName: string, data: object): Promise<Document>;
+    Create<T extends Document>(modelName: string, data: Omit<T, "_id">): Promise<T>;
     /**
      * @typedef ReadOptions
      * @prop {object} filter Mongodb query
@@ -44,11 +45,12 @@ export default class Robolt {
      */
     /**
      * Sends a GET request to the '/read/:model' route of robogo with the given data.
+     * @template {Document} T
      * @param {string} modelName
      * @param {ReadOptions} options
-     * @returns {Promise<Array<Document>>}
+     * @returns {Promise<Array<T>>}
      */
-    Read(modelName: string, options?: {
+    Read<T_1 extends Document>(modelName: string, options?: {
         /**
          * Mongodb query
          */
@@ -69,31 +71,33 @@ export default class Robolt {
          * The number of documents to include in the results set.
          */
         limit?: number;
-    }): Promise<Array<Document>>;
+    }): Promise<T_1[]>;
     /**
      * @typedef GetOptions
      * @prop {Array<string>} [projection] Fields to include in results. Uses MongoDB projection.
      */
     /**
      * Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
+     * @template {Document} T
      * @param {string} modelName
      * @param {string} id
      * @param {GetOptions} options
-     * @returns {Promise<Document|null>}
+     * @returns {Promise<T|null>}
      */
-    Get(modelName: string, id: string, options?: {
+    Get<T_2 extends Document>(modelName: string, id: string, options?: {
         /**
          * Fields to include in results. Uses MongoDB projection.
          */
         projection?: Array<string>;
-    }): Promise<Document | null>;
+    }): Promise<T_2>;
     /**
      * Sends a PATCH request to the '/update/:model' route of robogo with the given data.
+     * @template {Document} T
      * @param {string} modelName
-     * @param {Document} data
+     * @param {Partial<T> & Document} data
      * @returns {Promise<object>} The result of the MongoDB update operation
      */
-    Update(modelName: string, data: Document): Promise<object>;
+    Update<T_3 extends Document>(modelName: string, data: Partial<T_3> & Document): Promise<object>;
     /**
      * Sends a DELETE request to the '/delete/:model/:id' route of robogo with the given document _id.
      * @param {string} modelName
