@@ -5,7 +5,7 @@
  */
 
 /**
- * @typedef Document
+ * @typedef MongoDocument
  * @prop {string} _id
  */
 
@@ -22,6 +22,22 @@
  * @prop {Date} uploadDate
 */
 
+/**
+ * @typedef RoboField
+ * @prop {string} name
+ * @prop {string} key
+ * @prop {string} type
+ * @prop {string[]} [enum]
+ * @prop {boolean} [required]
+ * @prop {boolean} [isArray]
+ * @prop {boolean} [marked]
+ * @prop {boolean} [hidden]
+ * @prop {any} [default]
+ * @prop {Record<string, any>} [props]
+ * @prop {string} [ref]
+ * @prop {RoboField[]} [subfields]
+*/
+
 export default class Robolt {
   /**
    * @param {AxiosInstance} axios A preconfigured axios instance
@@ -36,7 +52,7 @@ export default class Robolt {
 
   /**
    * Sends a POST request to the '/create/:model' route of robogo with the given data.
-   * @template {Document} T
+   * @template {MongoDocument} T
    * @param {string} modelName Name of the model registered in robogo
    * @param {Omit<T, '_id'>} data Object matching the schema of the model
    * @returns {Promise<T>} The created document
@@ -48,7 +64,7 @@ export default class Robolt {
 
   /**
    * @typedef ReadOptions
-   * @prop {object} filter Mongodb query
+   * @prop {object} [filter] Mongodb query
    * @prop {Array<string>} [projection] Fields to include in results. Uses MongoDB projection.
    * @prop {object} [sort] Mongodb sort - https://docs.mongodb.com/manual/reference/method/cursor.sort/index.html
    * @prop {number} [skip] The number of documents to skip in the results set.
@@ -56,7 +72,7 @@ export default class Robolt {
    */
   /**
    * Sends a GET request to the '/read/:model' route of robogo with the given data.
-   * @template {Document} T
+   * @template {MongoDocument} T
    * @param {string} modelName 
    * @param {ReadOptions} options 
    * @returns {Promise<Array<T>>}
@@ -81,7 +97,7 @@ export default class Robolt {
    */
   /**
    * Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
-   * @template {Document} T
+   * @template {MongoDocument} T
    * @param {string} modelName 
    * @param {string} id 
    * @param {GetOptions} options 
@@ -99,9 +115,9 @@ export default class Robolt {
 
   /**
    * Sends a PATCH request to the '/update/:model' route of robogo with the given data.
-   * @template {Document} T
+   * @template {MongoDocument} T
    * @param {string} modelName 
-   * @param {Partial<T> & Document} data 
+   * @param {Partial<T> & MongoDocument} data 
    * @returns {Promise<object>} The result of the MongoDB update operation
    */
   async Update(modelName, data) {
@@ -124,7 +140,7 @@ export default class Robolt {
    * Sends a POST request to the '/runner/:service/:function' route of robogo with the given data.
    * @param {string} serviceName 
    * @param {string} functionName 
-   * @param {object} params 
+   * @param {object} [params] 
    * @returns {Promise}
    */
   async RunService(serviceName, functionName, params) {
@@ -136,7 +152,7 @@ export default class Robolt {
    * Sends a GET request to the '/getter/:service/:function' route of robogo with the given data.
    * @param {string} serviceName 
    * @param {string} functionName 
-   * @param {object} params 
+   * @param {object} [params] 
    * @returns {Promise}
    */
   async GetService(serviceName, functionName, params) {
@@ -297,7 +313,7 @@ export default class Robolt {
   /**
    * Sends a GET request to the '/schema/:model' route of robogo.
    * @param {string} modelName 
-   * @returns {Promise<object>}
+   * @returns {Promise<RoboField[]>}
    */
   async Schema(modelName) {
     const response = await this.$axios.get(`/${this.Prefix}/schema/${modelName}`)
@@ -308,7 +324,7 @@ export default class Robolt {
    * Sends a GET request to the '/fields/:model' route of robogo.
    * @param {string} modelName 
    * @param {number} [depth] 
-   * @returns {Promise<object>}
+   * @returns {Promise<RoboField[]>}
    */
   async Fields(modelName, depth) {
     const response = await this.$axios.get(`/${this.Prefix}/fields/${modelName}`, {
@@ -367,7 +383,7 @@ export default class Robolt {
   }
 }
 
-class Accesses {
+export class Accesses {
   constructor(accesses) {
     this.model = accesses.model
     this.fields = accesses.fields
@@ -401,7 +417,7 @@ class Accesses {
   }
 }
 
-class AccessGroups {
+export class AccessGroups {
   constructor(accessGroups) {
     this.accessGroups = accessGroups
   }

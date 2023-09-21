@@ -2,7 +2,7 @@
  * @typedef {import('axios').AxiosInstance} AxiosInstance
  */
 /**
- * @typedef Document
+ * @typedef MongoDocument
  * @prop {string} _id
  */
 /**
@@ -17,6 +17,21 @@
  * @prop {string} [thumbnailPath]
  * @prop {Date} uploadDate
 */
+/**
+ * @typedef RoboField
+ * @prop {string} name
+ * @prop {string} key
+ * @prop {string} type
+ * @prop {string[]} [enum]
+ * @prop {boolean} [required]
+ * @prop {boolean} [isArray]
+ * @prop {boolean} [marked]
+ * @prop {boolean} [hidden]
+ * @prop {any} [default]
+ * @prop {Record<string, any>} [props]
+ * @prop {string} [ref]
+ * @prop {RoboField[]} [subfields]
+*/
 export default class Robolt {
     /**
      * @param {AxiosInstance} axios A preconfigured axios instance
@@ -29,15 +44,15 @@ export default class Robolt {
     ServeStaticPath: string;
     /**
      * Sends a POST request to the '/create/:model' route of robogo with the given data.
-     * @template {Document} T
+     * @template {MongoDocument} T
      * @param {string} modelName Name of the model registered in robogo
      * @param {Omit<T, '_id'>} data Object matching the schema of the model
      * @returns {Promise<T>} The created document
      */
-    Create<T extends Document>(modelName: string, data: Omit<T, "_id">): Promise<T>;
+    Create<T extends MongoDocument>(modelName: string, data: Omit<T, "_id">): Promise<T>;
     /**
      * @typedef ReadOptions
-     * @prop {object} filter Mongodb query
+     * @prop {object} [filter] Mongodb query
      * @prop {Array<string>} [projection] Fields to include in results. Uses MongoDB projection.
      * @prop {object} [sort] Mongodb sort - https://docs.mongodb.com/manual/reference/method/cursor.sort/index.html
      * @prop {number} [skip] The number of documents to skip in the results set.
@@ -45,16 +60,16 @@ export default class Robolt {
      */
     /**
      * Sends a GET request to the '/read/:model' route of robogo with the given data.
-     * @template {Document} T
+     * @template {MongoDocument} T
      * @param {string} modelName
      * @param {ReadOptions} options
      * @returns {Promise<Array<T>>}
      */
-    Read<T_1 extends Document>(modelName: string, options?: {
+    Read<T_1 extends MongoDocument>(modelName: string, options?: {
         /**
          * Mongodb query
          */
-        filter: object;
+        filter?: object;
         /**
          * Fields to include in results. Uses MongoDB projection.
          */
@@ -78,13 +93,13 @@ export default class Robolt {
      */
     /**
      * Sends a GET request to the '/get/:model/:id' route of robogo with the given data.
-     * @template {Document} T
+     * @template {MongoDocument} T
      * @param {string} modelName
      * @param {string} id
      * @param {GetOptions} options
      * @returns {Promise<T|null>}
      */
-    Get<T_2 extends Document>(modelName: string, id: string, options?: {
+    Get<T_2 extends MongoDocument>(modelName: string, id: string, options?: {
         /**
          * Fields to include in results. Uses MongoDB projection.
          */
@@ -92,12 +107,12 @@ export default class Robolt {
     }): Promise<T_2>;
     /**
      * Sends a PATCH request to the '/update/:model' route of robogo with the given data.
-     * @template {Document} T
+     * @template {MongoDocument} T
      * @param {string} modelName
-     * @param {Partial<T> & Document} data
+     * @param {Partial<T> & MongoDocument} data
      * @returns {Promise<object>} The result of the MongoDB update operation
      */
-    Update<T_3 extends Document>(modelName: string, data: Partial<T_3> & Document): Promise<object>;
+    Update<T_3 extends MongoDocument>(modelName: string, data: Partial<T_3> & MongoDocument): Promise<object>;
     /**
      * Sends a DELETE request to the '/delete/:model/:id' route of robogo with the given document _id.
      * @param {string} modelName
@@ -109,18 +124,18 @@ export default class Robolt {
      * Sends a POST request to the '/runner/:service/:function' route of robogo with the given data.
      * @param {string} serviceName
      * @param {string} functionName
-     * @param {object} params
+     * @param {object} [params]
      * @returns {Promise}
      */
-    RunService(serviceName: string, functionName: string, params: object): Promise<any>;
+    RunService(serviceName: string, functionName: string, params?: object): Promise<any>;
     /**
      * Sends a GET request to the '/getter/:service/:function' route of robogo with the given data.
      * @param {string} serviceName
      * @param {string} functionName
-     * @param {object} params
+     * @param {object} [params]
      * @returns {Promise}
      */
-    GetService(serviceName: string, functionName: string, params: object): Promise<any>;
+    GetService(serviceName: string, functionName: string, params?: object): Promise<any>;
     /**
      * Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
      * @param {File} file
@@ -193,16 +208,16 @@ export default class Robolt {
     /**
      * Sends a GET request to the '/schema/:model' route of robogo.
      * @param {string} modelName
-     * @returns {Promise<object>}
+     * @returns {Promise<RoboField[]>}
      */
-    Schema(modelName: string): Promise<object>;
+    Schema(modelName: string): Promise<RoboField[]>;
     /**
      * Sends a GET request to the '/fields/:model' route of robogo.
      * @param {string} modelName
      * @param {number} [depth]
-     * @returns {Promise<object>}
+     * @returns {Promise<RoboField[]>}
      */
-    Fields(modelName: string, depth?: number): Promise<object>;
+    Fields(modelName: string, depth?: number): Promise<RoboField[]>;
     /**
      * Sends a GET request to the '/count/:model' route of robogo.
      * @param {string} modelName
@@ -228,8 +243,23 @@ export default class Robolt {
      */
     AccessGroups(): Promise<AccessGroups>;
 }
+export class Accesses {
+    constructor(accesses: any);
+    model: any;
+    fields: any;
+    canReadModel(): any;
+    canWriteModel(): any;
+    canCreateModel(): any;
+    canReadField(path: any): any;
+    canWriteField(path: any): any;
+}
+export class AccessGroups {
+    constructor(accessGroups: any);
+    accessGroups: any;
+    check(groups: any): void;
+}
 export type AxiosInstance = import('axios').AxiosInstance;
-export type Document = {
+export type MongoDocument = {
     _id: string;
 };
 export type RoboFile = {
@@ -246,20 +276,18 @@ export type RoboFile = {
     thumbnailPath?: string;
     uploadDate: Date;
 };
-declare class Accesses {
-    constructor(accesses: any);
-    model: any;
-    fields: any;
-    canReadModel(): any;
-    canWriteModel(): any;
-    canCreateModel(): any;
-    canReadField(path: any): any;
-    canWriteField(path: any): any;
-}
-declare class AccessGroups {
-    constructor(accessGroups: any);
-    accessGroups: any;
-    check(groups: any): void;
-}
-export {};
+export type RoboField = {
+    name: string;
+    key: string;
+    type: string;
+    enum?: string[];
+    required?: boolean;
+    isArray?: boolean;
+    marked?: boolean;
+    hidden?: boolean;
+    default?: any;
+    props?: Record<string, any>;
+    ref?: string;
+    subfields?: RoboField[];
+};
 //# sourceMappingURL=index.d.ts.map
