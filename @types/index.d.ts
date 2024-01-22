@@ -139,10 +139,10 @@ export default class Robolt {
     /**
      * Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
      * @param {File} file
-     * @param {(percent: number, event: any) => {}} [percentCallback]
+     * @param {(percent: number, event: any) => void} [percentCallback]
      * @returns
      */
-    UploadFile(file: File, percentCallback?: (percent: number, event: any) => {}): Promise<any>;
+    UploadFile(file: File, percentCallback?: (percent: number, event: any) => void): Promise<any>;
     /**
      * Returns the file's absolute and relative URLs where it is static hosted by robogo. If a thumbnail was also created it also returns the thumbnail's URLs.
      * @param {RoboFile} file RoboFile instance object
@@ -162,31 +162,31 @@ export default class Robolt {
     /**
      * Downloads the file for a RoboFile document from robogo.
      * @param {RoboFile|string} file RoboFile instance object or its _id
-     * @param {(percent: number, event: any) => {}} [percentCallback]
+     * @param {(percent: number, event: any) => void} [percentCallback]
      * @returns {Promise<File>}
      */
-    GetFile(file: RoboFile | string, percentCallback?: (percent: number, event: any) => {}): Promise<File>;
+    GetFile(file: RoboFile | string, percentCallback?: (percent: number, event: any) => void): Promise<File>;
     /**
      * Downloads the file for a RoboFile document from robogo and returns a local URL for it.
      * @param {RoboFile|string} file RoboFile instance object or its _id
-     * @param {(percent: number, event: any) => {}} [percentCallback]
+     * @param {(percent: number, event: any) => void} [percentCallback]
      * @returns {Promise<string>}
      */
-    GetFileURL(file: RoboFile | string, percentCallback?: (percent: number, event: any) => {}): Promise<string>;
+    GetFileURL(file: RoboFile | string, percentCallback?: (percent: number, event: any) => void): Promise<string>;
     /**
      * Downloads the thumbnail file for a RoboFile document from robogo.
      * @param {RoboFile|string} file RoboFile instance object or its _id
-     * @param {(percent: number, event: any) => {}} [percentCallback]
+     * @param {(percent: number, event: any) => void} [percentCallback]
      * @returns {Promise<File>}
      */
-    GetThumbnail(file: RoboFile | string, percentCallback?: (percent: number, event: any) => {}): Promise<File>;
+    GetThumbnail(file: RoboFile | string, percentCallback?: (percent: number, event: any) => void): Promise<File>;
     /**
      * Downloads the thumbnail file for a RoboFile document from robogo and returns a local URL for it.
      * @param {RoboFile|string} file RoboFile instance object or its _id
-     * @param {(percent: number, event: any) => {}} [percentCallback]
+     * @param {(percent: number, event: any) => void} [percentCallback]
      * @returns {Promise<string>}
      */
-    GetThumbnailURL(file: RoboFile | string, percentCallback?: (percent: number, event: any) => {}): Promise<string>;
+    GetThumbnailURL(file: RoboFile | string, percentCallback?: (percent: number, event: any) => void): Promise<string>;
     /**
      * Sends a POST request to the '/fileclone/:id' route of robogo with the given file id.
      * @param {RoboFile|string} file RoboFile instance object or its _id

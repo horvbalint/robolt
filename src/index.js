@@ -165,7 +165,7 @@ export default class Robolt {
   /**
    * Sends a POST (multipart/form-data) request to the '/fileupload' route of robogo with the given file.
    * @param {File} file 
-   * @param {(percent: number, event: any) => {}} [percentCallback] 
+   * @param {(percent: number, event: any) => void} [percentCallback] 
    * @returns 
    */
   async UploadFile(file, percentCallback) {
@@ -212,7 +212,7 @@ export default class Robolt {
   /**
    * Downloads the file for a RoboFile document from robogo.
    * @param {RoboFile|string} file RoboFile instance object or its _id
-   * @param {(percent: number, event: any) => {}} [percentCallback] 
+   * @param {(percent: number, event: any) => void} [percentCallback] 
    * @returns {Promise<File>}
    */
   async GetFile(file, percentCallback) {
@@ -235,7 +235,7 @@ export default class Robolt {
   /**
    * Downloads the file for a RoboFile document from robogo and returns a local URL for it.
    * @param {RoboFile|string} file RoboFile instance object or its _id
-   * @param {(percent: number, event: any) => {}} [percentCallback] 
+   * @param {(percent: number, event: any) => void} [percentCallback] 
    * @returns {Promise<string>}
    */
   async GetFileURL(file, percentCallback) {
@@ -246,7 +246,7 @@ export default class Robolt {
   /**
    * Downloads the thumbnail file for a RoboFile document from robogo.
    * @param {RoboFile|string} file RoboFile instance object or its _id
-   * @param {(percent: number, event: any) => {}} [percentCallback] 
+   * @param {(percent: number, event: any) => void} [percentCallback] 
    * @returns {Promise<File>}
    */
   async GetThumbnail(file, percentCallback) {
@@ -266,7 +266,7 @@ export default class Robolt {
   /**
    * Downloads the thumbnail file for a RoboFile document from robogo and returns a local URL for it.
    * @param {RoboFile|string} file RoboFile instance object or its _id
-   * @param {(percent: number, event: any) => {}} [percentCallback] 
+   * @param {(percent: number, event: any) => void} [percentCallback] 
    * @returns {Promise<string>}
    */
   async GetThumbnailURL(file, percentCallback) {
