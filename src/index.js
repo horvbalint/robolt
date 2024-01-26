@@ -38,6 +38,16 @@
  * @prop {RoboField[]} [subfields]
 */
 
+/**
+ * @typedef Model
+ * @prop {string} model
+ * @prop {string} name
+ * @prop {string[]} softwares
+ * @prop {object} props
+ * @prop {object} defaultFilter
+ * @prop {object} defaultSort
+*/
+
 export default class Robolt {
   /**
    * @param {AxiosInstance} axios A preconfigured axios instance
@@ -301,7 +311,7 @@ export default class Robolt {
   /**
    * Sends a GET request to the '/model' or the 'model/:model' route of robogo, depending on wether the modelName parameter was given.
    * @param {string|null} [modelName] 
-   * @returns {Promise<object|object[]>}
+   * @returns {Promise<Model|Model[]>}
    */
   async Model(modelName = null) {
     if(!modelName)
