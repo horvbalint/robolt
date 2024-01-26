@@ -4,6 +4,7 @@
 /**
  * @typedef MongoDocument
  * @prop {string} _id
+ * @prop {number} [_searchScore]
  */
 /**
  * @typedef RoboFile
@@ -270,6 +271,7 @@ export class AccessGroups {
 export type AxiosInstance = import('axios').AxiosInstance;
 export type MongoDocument = {
     _id: string;
+    _searchScore?: number;
 };
 export type RoboFile = {
     _id: string;

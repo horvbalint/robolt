@@ -7,6 +7,7 @@
 /**
  * @typedef MongoDocument
  * @prop {string} _id
+ * @prop {number} [_searchScore]
  */
 
 /**
