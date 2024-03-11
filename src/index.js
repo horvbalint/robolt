@@ -366,7 +366,7 @@ export default class Robolt {
   /**
    * Returns the same result as the Schema method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
    * @param {string} modelName 
-   * @returns {Promise<object>}
+   * @returns {Promise<RoboField[]>}
    */
   async RecycledSchema(modelName) {
     const fields = await this.Schema(modelName)
@@ -447,7 +447,7 @@ export class AccessGroups {
 /**
  * @param {object} field 
  * @param {object} processedRefs 
- * @returns
+ * @returns {RoboField[]}
  */
 function recycleSchemaField(field, processedRefs = {}) {
   if(field.ref) {

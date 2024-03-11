@@ -238,9 +238,9 @@ export default class Robolt {
     /**
      * Returns the same result as the Schema method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
      * @param {string} modelName
-     * @returns {Promise<object>}
+     * @returns {Promise<RoboField[]>}
      */
-    RecycledSchema(modelName: string): Promise<object>;
+    RecycledSchema(modelName: string): Promise<RoboField[]>;
     /**
      * Sends a GET request to the '/accesses/:modelName' route of robogo.
      * @param {string} modelName
