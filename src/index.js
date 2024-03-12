@@ -7,6 +7,7 @@
 /**
  * @typedef MongoDocument
  * @prop {string} _id
+ * @prop {number} [_searchScore]
  */
 
 /**
@@ -37,6 +38,16 @@
  * @prop {Record<string, any>} [props]
  * @prop {string} [ref]
  * @prop {RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[]} [subfields]
+*/
+
+/**
+ * @typedef Model
+ * @prop {string} model
+ * @prop {string} name
+ * @prop {string[]} softwares
+ * @prop {object} props
+ * @prop {object} defaultFilter
+ * @prop {object} defaultSort
 */
 
 export default class Robolt {
@@ -302,7 +313,7 @@ export default class Robolt {
   /**
    * Sends a GET request to the '/model' or the 'model/:model' route of robogo, depending on wether the modelName parameter was given.
    * @param {string|null} [modelName] 
-   * @returns {Promise<object|object[]>}
+   * @returns {Promise<Model|Model[]>}
    */
   async Model(modelName = null) {
     if(!modelName)
@@ -358,7 +369,7 @@ export default class Robolt {
   /**
    * Returns the same result as the Schema method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
    * @param {string} modelName 
-   * @returns {Promise<object>}
+   * @returns {Promise<RoboField[]>}
    */
   async RecycledSchema(modelName) {
     const fields = await this.Schema(modelName)
@@ -439,7 +450,7 @@ export class AccessGroups {
 /**
  * @param {object} field 
  * @param {object} processedRefs 
- * @returns
+ * @returns {RoboField[]}
  */
 function recycleSchemaField(field, processedRefs = {}) {
   if(field.ref) {

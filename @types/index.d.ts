@@ -4,6 +4,7 @@
 /**
  * @typedef MongoDocument
  * @prop {string} _id
+ * @prop {number} [_searchScore]
  */
 /**
  * @typedef RoboFile
@@ -32,6 +33,15 @@
  * @prop {Record<string, any>} [props]
  * @prop {string} [ref]
  * @prop {RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[]} [subfields]
+*/
+/**
+ * @typedef Model
+ * @prop {string} model
+ * @prop {string} name
+ * @prop {string[]} softwares
+ * @prop {object} props
+ * @prop {object} defaultFilter
+ * @prop {object} defaultSort
 */
 export default class Robolt {
     /**
@@ -203,9 +213,9 @@ export default class Robolt {
     /**
      * Sends a GET request to the '/model' or the 'model/:model' route of robogo, depending on wether the modelName parameter was given.
      * @param {string|null} [modelName]
-     * @returns {Promise<object|object[]>}
+     * @returns {Promise<Model|Model[]>}
      */
-    Model(modelName?: string | null): Promise<object | object[]>;
+    Model(modelName?: string | null): Promise<Model | Model[]>;
     /**
      * Sends a GET request to the '/schema/:model' route of robogo.
      * @template {object} T
@@ -231,9 +241,9 @@ export default class Robolt {
     /**
      * Returns the same result as the Schema method, but reintroduces circular references, that were stripped out by Robogo before sending the data to the frontend.
      * @param {string} modelName
-     * @returns {Promise<object>}
+     * @returns {Promise<RoboField[]>}
      */
-    RecycledSchema(modelName: string): Promise<object>;
+    RecycledSchema(modelName: string): Promise<RoboField[]>;
     /**
      * Sends a GET request to the '/accesses/:modelName' route of robogo.
      * @param {string} modelName
@@ -264,6 +274,7 @@ export class AccessGroups {
 export type AxiosInstance = import('axios').AxiosInstance;
 export type MongoDocument = {
     _id: string;
+    _searchScore?: number;
 };
 export type RoboFile = {
     _id: string;
@@ -292,5 +303,13 @@ export type RoboField<T extends Record<string, unknown> = Record<string, unknown
     props?: Record<string, any>;
     ref?: string;
     subfields?: RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[];
+};
+export type Model = {
+    model: string;
+    name: string;
+    softwares: string[];
+    props: object;
+    defaultFilter: object;
+    defaultSort: object;
 };
 //# sourceMappingURL=index.d.ts.map
