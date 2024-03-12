@@ -18,9 +18,10 @@
  * @prop {Date} uploadDate
 */
 /**
+ * @template {Record<string, unknown>} [T = Record<string, unknown>]
  * @typedef RoboField
  * @prop {string} name
- * @prop {string} key
+ * @prop {keyof T} key
  * @prop {string} type
  * @prop {string[]} [enum]
  * @prop {boolean} [required]
@@ -30,7 +31,7 @@
  * @prop {any} [default]
  * @prop {Record<string, any>} [props]
  * @prop {string} [ref]
- * @prop {RoboField[]} [subfields]
+ * @prop {RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[]} [subfields]
 */
 export default class Robolt {
     /**
@@ -207,17 +208,19 @@ export default class Robolt {
     Model(modelName?: string | null): Promise<object | object[]>;
     /**
      * Sends a GET request to the '/schema/:model' route of robogo.
+     * @template {object} T
      * @param {string} modelName
-     * @returns {Promise<RoboField[]>}
+     * @returns {Promise<RoboField<T>[]>}
      */
-    Schema(modelName: string): Promise<RoboField[]>;
+    Schema<T_4 extends unknown>(modelName: string): Promise<RoboField<T_4>[]>;
     /**
      * Sends a GET request to the '/fields/:model' route of robogo.
+     * @template {object} T
      * @param {string} modelName
      * @param {number} [depth]
-     * @returns {Promise<RoboField[]>}
+     * @returns {Promise<RoboField<T>[]>}
      */
-    Fields(modelName: string, depth?: number): Promise<RoboField[]>;
+    Fields<T_5 extends unknown>(modelName: string, depth?: number): Promise<RoboField<T_5>[]>;
     /**
      * Sends a GET request to the '/count/:model' route of robogo.
      * @param {string} modelName
@@ -276,9 +279,9 @@ export type RoboFile = {
     thumbnailPath?: string;
     uploadDate: Date;
 };
-export type RoboField = {
+export type RoboField<T extends Record<string, unknown> = Record<string, unknown>> = {
     name: string;
-    key: string;
+    key: keyof T;
     type: string;
     enum?: string[];
     required?: boolean;
@@ -288,6 +291,6 @@ export type RoboField = {
     default?: any;
     props?: Record<string, any>;
     ref?: string;
-    subfields?: RoboField[];
+    subfields?: RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[];
 };
 //# sourceMappingURL=index.d.ts.map

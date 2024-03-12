@@ -23,9 +23,10 @@
 */
 
 /**
+ * @template {Record<string, unknown>} [T = Record<string, unknown>]
  * @typedef RoboField
  * @prop {string} name
- * @prop {string} key
+ * @prop {keyof T} key
  * @prop {string} type
  * @prop {string[]} [enum]
  * @prop {boolean} [required]
@@ -35,7 +36,7 @@
  * @prop {any} [default]
  * @prop {Record<string, any>} [props]
  * @prop {string} [ref]
- * @prop {RoboField[]} [subfields]
+ * @prop {RoboField<Extract<T[keyof T], Record<string, unknown>> | Record<string, unknown>>[]} [subfields]
 */
 
 export default class Robolt {
@@ -312,8 +313,9 @@ export default class Robolt {
 
   /**
    * Sends a GET request to the '/schema/:model' route of robogo.
+   * @template {object} T
    * @param {string} modelName 
-   * @returns {Promise<RoboField[]>}
+   * @returns {Promise<RoboField<T>[]>}
    */
   async Schema(modelName) {
     const response = await this.$axios.get(`/${this.Prefix}/schema/${modelName}`)
@@ -322,9 +324,10 @@ export default class Robolt {
 
   /**
    * Sends a GET request to the '/fields/:model' route of robogo.
+   * @template {object} T
    * @param {string} modelName 
    * @param {number} [depth] 
-   * @returns {Promise<RoboField[]>}
+   * @returns {Promise<RoboField<T>[]>}
    */
   async Fields(modelName, depth) {
     const response = await this.$axios.get(`/${this.Prefix}/fields/${modelName}`, {
